@@ -2,7 +2,7 @@
     <div class="layout">
         <Menu mode="horizontal" theme="dark" active-name="1" @on-select="menushow">
             <div class="layout-logo">电力系统(用户)</div>
-            <div class="layout-exit">退出</div>
+            <div class="layout-exit" @click="exit">退出</div>
             <div class="layout-nav">
                 <MenuItem name="1" >
                     <Icon type="ios-navigate"></Icon>
@@ -33,12 +33,12 @@
             <div class="layout-assistant">
                 <MenuItem name="zdcx">账单查询</MenuItem>
                 <MenuItem name="wsff">网上付费</MenuItem>
-                <MenuItem name="jfjlcx">缴费记录</MenuItem>
+                <MenuItem name="jfjl">缴费记录</MenuItem>
             </div>
         </Menu>
         <Menu mode="horizontal" active-name="1" @on-select="click" v-if="menuIndex == 3">
             <div class="layout-assistant_2">
-                <MenuItem name="gzcx">故障查询</MenuItem>
+                <MenuItem name="gzcx">故障报修</MenuItem>
                 <MenuItem name="ly">留言</MenuItem>
             </div>
         </Menu>
@@ -78,7 +78,10 @@ export default {
         console.log(this.menuIndex)
     },
     click:function(name){
-      this.$router.push('/user/' + name)
+        this.$router.push('/user/' + name)
+    },
+    exit(){
+        this.$router.push('/')
     }
   }
 }
@@ -116,6 +119,7 @@ export default {
     position: absolute;
     top: 15px;
     right: 20px;
+    cursor:pointer;
 }
 .layout-nav{
     width: 500px;

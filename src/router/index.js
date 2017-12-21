@@ -1,10 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import user from '@/components/user'
 import login from '@/components/login'
-import gonggao from '@/pages/gonggao'
-import zhxx from '@/pages/zhxx'
-import xgmm from '@/pages/xgmm'
+import admin from '@/components/admin'
+// user页面
+import gonggao from '@/user_pages/gonggao'
+import zhxx from '@/user_pages/zhxx'
+import xgmm from '@/user_pages/xgmm'
+import zdcx from '@/user_pages/zdcx'
+import wsff from '@/user_pages/wsff'
+import jfjl from '@/user_pages/jfjl'
+import gzcx from '@/user_pages/gzcx'
+import ly from '@/user_pages/ly'
+import tdjd from '@/user_pages/tdjd'
+import ywjd from '@/user_pages/ywjd'
+// admin页面
+import admin_gonggao from '@/admin_pages/gonggao'
+import lygl from '@/admin_pages/lygl'
+import gzgl from '@/admin_pages/gzgl'
+import fylr from '@/admin_pages/fylr'
+import sfgl from '@/admin_pages/sfgl'
+
+
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
@@ -20,22 +38,71 @@ export default new Router({
       component: user,
       children: [
         {
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
           path: 'gonggao',
           component: gonggao
         },
         {
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
           path: 'zhxx',
           component: zhxx
         },
         {
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
           path: 'xgmm',
           component: xgmm
+        },
+        {
+          path: 'zdcx',
+          component: zdcx
+        },
+        {
+          path: 'wsff',
+          component: wsff
+        },
+        {
+          path: 'jfjl',
+          component: jfjl
+        },
+        {
+          path: 'gzcx',
+          component: gzcx
+        },
+        {
+          path: 'ly',
+          component: ly
+        },
+        {
+          path: 'sfgl',
+          component: sfgl
+        }
+      ]
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: admin,
+      children: [
+        {
+          path: 'gonggao',
+          component: admin_gonggao
+        },
+        {
+          path: 'lygl',
+          component: lygl
+        },
+        {
+          path: 'gzgl',
+          component: gzgl
+        },
+        {
+          path: 'fylr',
+          component: fylr
+        },
+        {
+          path: 'lygl',
+          component: lygl
+        },
+        {
+          path: 'sfgl',
+          component: sfgl
         },
       ]
     },
@@ -43,6 +110,6 @@ export default new Router({
       path: '/',
       name: 'login',
       component: login
-    }
+    },
   ]
 })
