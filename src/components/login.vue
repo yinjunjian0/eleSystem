@@ -121,7 +121,16 @@ export default {
         }
     },
     created:function(){
-        
+        //ajax请求
+        axios.post('/api',{
+            name:'1',
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     },
     methods: {
         handleSubmit(name) {
@@ -130,14 +139,7 @@ export default {
                     if (this.formInline.identity == '用户') {
                         if(this.formInline.user == 1 && this.formInline.password == 1){
                             this.$Message.success('登陆成功');
-                            // ajax请求
-                            // axios.get('/sql/login.php')
-                            //   .then(function (response) {
-                            //     console.log(response);
-                            //   })
-                            //   .catch(function (error) {
-                            //     console.log(error);
-                            //   });
+                            // 
                             this.$router.push('user')
                         }else{
                             this.$Message.error('用户名或密码错误');

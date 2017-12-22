@@ -22,7 +22,6 @@ import gzgl from '@/admin_pages/gzgl'
 import fylr from '@/admin_pages/fylr'
 import sfgl from '@/admin_pages/sfgl'
 
-
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
