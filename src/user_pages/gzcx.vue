@@ -16,11 +16,10 @@
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
             </FormItem>
-            <FormItem prop="date" label="出现时间">
-              <DatePicker type="date" placeholder="请输入故障出现时间" style="width: 100%" v-model="failure.date"></DatePicker>
+            <FormItem label="出现时间" style="height: 10px;" required></FormItem>
+                <DatePicker type="date" placeholder="请输入出现时间" style="width: 200px"  @on-change="dataformat"></DatePicker>
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
-            </FormItem>
             <FormItem prop="remark" label="描述">
                 <Input type="textarea" v-model="failure.remark" placeholder="请输入故障描述">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
@@ -33,6 +32,7 @@
     
 </template>
 <script>
+import axios from 'axios'
     export default {
       data () {
         return {
@@ -62,20 +62,58 @@
       
     },
     methods:{
+        dataformat(date){
+            this.failure.date = date
+        },
         failuresub(name) {
-          this.$refs[name].validate((valid) => {
+           var self = this
+           this.$refs[name].validate((valid) => {
                 if (valid) {
-                    // todo 后端注册请求
-                                        
-                    this.$Message.success('注册成功');
+                    console.log(self.failure.date)
+                    axios.post('/api/gzbx',{
+                        address: self.failure.address,
+                        problem: self.failure.problem,
+                        date: self.failure.date,
+                        remark: self.failure.remark
+                    })
+                      .then(function (response) {
+                        console.log(response.data)
+                        if (response.data == '报修成功') {
+                            self.$Message.success('报修成功');
+                        }else{
+                            self.$Message.error('报修失败, 注意填写要求');
+                        }
+                      })
+                      .catch(function (error) {
+                        self.$Message.error('未知错误');
+                      });                        
                 } else {
-                    this.$Message.error('注册失败, 注意填写要求');
-
+                    self.$Message.error('报修失败, 注意填写要求');
                 }
             })
+        },
+        format(fmt) { 
+             var o = { 
+                "M+" : this.getMonth()+1,                 //月份 
+                "d+" : this.getDate(),                    //日 
+                "h+" : this.getHours(),                   //小时 
+                "m+" : this.getMinutes(),                 //分 
+                "s+" : this.getSeconds(),                 //秒 
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+                "S"  : this.getMilliseconds()             //毫秒 
+            }; 
+            if(/(y+)/.test(fmt)) {
+                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+            }
+             for(var k in o) {
+                if(new RegExp("("+ k +")").test(fmt)){
+                     fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                 }
+             }
+            return fmt; 
         }
     }
-}
+ }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

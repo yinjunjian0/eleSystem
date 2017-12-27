@@ -10,51 +10,50 @@
 	</div>
 </template>
 <script>
-    export default {
-        data () {
-            return {
-                columns1: [
-                    {
-                        title: '用户名',
-                        key: 'name'
-                    },
-                    {
-                        title: '月份',
-                        key: 'month'
-                    },
-                    {
-                        title: '用电',
-                        key: 'yongdian'
-                    }
-                ],
-                data1: [
-                    {
-                        name: 'John Brown',
-                        yongdian: 18,
-                        month: '2016-10-03'
-                    },
-                    {
-                        name: 'Jim Green',
-                        yongdian: 24,
-                        month: '2016-10-01'
-                    },
-                    {
-                        name: 'Joe Black',
-                        yongdian: 30,
-                        month: '2016-10-02'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        yongdian: 26,
-                        month: '2016-10-04'
-                    }
-                ]
-            }
-        },
-        methods:{
-        	
+import axios from 'axios'
+export default {
+    data () {
+        return {
+            columns1: [
+                {
+                    title: '用户名',
+                    key: 'user_name'
+                },
+                {
+                    title: '月份',
+                    key: 'date'
+                },
+                {
+                    title: '用电',
+                    key: 'yongdian'
+                }
+            ],
+            data1: [
+                // {
+                //     name: 'John Brown',
+                //     yongdian: 18,
+                //     month: '2016-10-03'
+                // }
+            ]
         }
-    }
+    },
+    created:function(){
+        var self = this
+        axios.post('/api/zdcx',{
+            name: localStorage.getItem("username"),
+        })
+          .then(function (response) {
+            console.log(response.data.data)
+            var arr = response.data.data
+            for (var index in arr){
+                self.data1.push(response.data.data[index])
+            }
+          })
+          .catch(function (error) {
+            self.$Message.error('未知错误');
+          });     
+      }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

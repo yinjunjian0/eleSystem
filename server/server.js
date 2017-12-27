@@ -1,32 +1,117 @@
 ﻿var express = require('express');
 var app = express();
 var mysql  = require('mysql');
+var router = express.Router();
+// 中间件
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 // 数据库连接
 var models = require('./db');
 var connection = mysql.createConnection(models.mysql);
-connection.connect();
+// connection.connect();
  
 // 读取mapper
 var $sql = require('./sqlMap');
 
-// connection.query($sql.user.name, function(err, rows) {
-//     user = rows
-// });
-// app.post('/test',[param.name], function (req, res) {
-//     res.send(user);
-// });
-app.post('/test', (req, res) => {
-	var params = req.body;
-	console.log(params);
-	conn.query($sql.user.name,[params.name], function(err, result) {
-		data = result
-	})
-	res.json(data)
-});
-
-
-
-
+// 使用DBConfig.js的配置信息创建一个MySQL连接池
+var pool = mysql.createPool( models.mysql );
+// 响应一个JSON数据
+var responseJSON = function (res, ret,sql) {
+     if(typeof ret === 'undefined') { 
+          res.json({
+            code:'-200',
+            msg: '操作失败',
+            data: ret ,
+            sql: sql
+        }); 
+    } else { 
+      res.json(ret); 
+  }};
+// 添加用户
+app.post('/login', function(req, res, next){
+ 	// 从连接池获取连接 
+	pool.getConnection(function(err, connection) { 
+	// 获取前台页面传过来的参数  
+	 	var param = req.body;   
+		// 建立连接 增加一个用户信息 
+		connection.query($sql.user.name, param.name, function(err, result) {
+	        if(result) {      
+	             result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result	,
+	                param: param
+	            };  
+	        }     
+     	// 以json形式，把操作结果返回给前台页面     
+        responseJSON(res, result);   
+     	// 释放连接  
+       connection.release();  
+       });
+    });
+ });
+// 注册
+app.post('/regis', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.regis.regis_data, [param.name,param.password,param.identity,param.email,param.phone,param.time], function(err, result) {
+	        if(result) {      
+	            res.send('注册成功') 
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 账户信息
+app.post('/zhxx', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.user.name, param.name, function(err, result) {
+	        if(result) {      
+	             result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result	,
+	            };  
+	        }     
+        responseJSON(res, result);   
+        connection.release();  
+       });
+    });
+ });
+// 账单查询
+app.post('/zdcx', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.zdcx, param.name, function(err, result) {
+	        if(result) {      
+	             result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result	,
+	            };  
+	        }     
+        responseJSON(res, result);   
+        connection.release();  
+       });
+    });
+ });
+// 报修
+app.post('/gzbx', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.gzbx, [param.address,param.problem,param.date,param.remark], function(err, result) {
+	        if(result) {      
+	            res.send('报修成功')  
+	        }else{
+      		    responseJSON(res, result,$sql.gzbx);   
+	        }    
+        connection.release();  
+       });
+    });
+ });
 
 
 

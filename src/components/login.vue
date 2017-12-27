@@ -121,75 +121,102 @@ export default {
         }
     },
     created:function(){
-        //ajax请求
-        axios.post('/api',{
-            name:'1',
-        })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        Date.prototype.format = function(fmt) { 
+             var o = { 
+                "M+" : this.getMonth()+1,                 //月份 
+                "d+" : this.getDate(),                    //日 
+                "h+" : this.getHours(),                   //小时 
+                "m+" : this.getMinutes(),                 //分 
+                "s+" : this.getSeconds(),                 //秒 
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+                "S"  : this.getMilliseconds()             //毫秒 
+            }; 
+            if(/(y+)/.test(fmt)) {
+                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+            }
+             for(var k in o) {
+                if(new RegExp("("+ k +")").test(fmt)){
+                     fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                 }
+             }
+            return fmt; 
+        }   
+
     },
     methods: {
         handleSubmit(name) {
+            var self = this
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     if (this.formInline.identity == '用户') {
-                        if(this.formInline.user == 1 && this.formInline.password == 1){
-                            this.$Message.success('登陆成功');
-                            // 
-                            this.$router.push('user')
+                        var name = this.formInline.user.toString()
+                        var password = this.formInline.password.toString()
+                        axios.post('/api/login',{
+                            name: name,
+                        })
+                          .then(function (response) {
+                            console.log(response)
+                            if (password === response.data.data[0].user_password) {
+                                self.$Message.success('登陆成功');
+                                self.$router.push('user')
+                                localStorage.setItem('identity', '用户');
+                                localStorage.setItem('username', name);
+                            }else{
+                                self.$Message.error('用户名或密码错误');
+                            }
+                          })
+                          .catch(function (error) {
+                            self.$Message.error('用户名不存在');
+                          });
+                    }else if(self.formInline.identity == '管理员'){
+                        if(self.formInline.user == 1 && self.formInline.password == 1){
+                            self.$Message.success('登陆成功');
+                            self.$router.push('admin')
                         }else{
-                            this.$Message.error('用户名或密码错误');
+                            self.$Message.error('用户名或密码错误');
                         }
-                    }else if(this.formInline.identity == '管理员'){
-                        if(this.formInline.user == 1 && this.formInline.password == 1){
-                            this.$Message.success('登陆成功');
-                            this.$router.push('admin')
+                    }else if(self.formInline.identity == '数据管理员'){
+                        if(self.formInline.user == 1 && self.formInline.password == 1){
+                            self.$Message.success('登陆成功');
+                            self.$router.push('dataadmin')
                         }else{
-                            this.$Message.error('用户名或密码错误');
-                        }
-                    }else if(this.formInline.identity == '数据管理员'){
-                        if(this.formInline.user == 1 && this.formInline.password == 1){
-                            this.$Message.success('登陆成功');
-                            this.$router.push('dataadmin')
-                        }else{
-                            this.$Message.error('用户名或密码错误');
+                            self.$Message.error('用户名或密码错误');
                         }
                     }
-                    
                 } else {
-                    if (this.formInline.user == '' || this.formInline.password == '') {
-                        this.$Message.error('用户名或密码不能为空');
+                    if (self.formInline.user == '' || self.formInline.password == '') {
+                        self.$Message.error('用户名或密码不能为空');
 
-                    }else if(this.formInline.identity == ''){
-                        this.$Message.error('请选择身份');
+                    }else if(self.formInline.identity == ''){
+                        self.$Message.error('请选择身份');
                     }
                 }
             })
         },
         regis(name) {
-
+            var self = this
+            var time = new Date().format("yyyy-MM-dd hh:mm:ss");
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    // todo 后端注册请求
-                                        
-                    this.$Message.success('注册成功');
+                    axios.post('/api/regis',{
+                            name: this.regisinline.user,
+                            password: this.regisinline.password,
+                            identity: this.regisinline.identity,
+                            email: this.regisinline.email,
+                            phone: this.regisinline.phone,
+                            time: time
+                        })
+                          .then(function (response) {
+                            console.log(response)
+                            self.$Message.success(response.data);
+                          })
+                          .catch(function (error) {
+                            self.$Message.error('未知错误');
+                          });                    
                 } else {
                     this.$Message.error('注册失败, 注意填写要求');
-
                 }
             })
-        },
-        del () {
-            this.modal_loading = true;
-            setTimeout(() => {
-                this.modal_loading = false;
-                this.modal2 = false;
-                this.$Message.success('Successfully delete');
-            }, 2000);
         }
     }
 }
@@ -208,8 +235,6 @@ export default {
     margin: 0 auto;
     margin-top: 200px;
     text-align: center;
-}
-Button{
 }
 
 </style>  

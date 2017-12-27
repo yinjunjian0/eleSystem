@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '',
     proxyTable: {
         "/api": {
-            target: 'http://localhost:8001/test',
+            target: 'http://localhost:8001',
             // https://bird.ioliu.cn/weather
             secure: false,
             changeOrigin: true,

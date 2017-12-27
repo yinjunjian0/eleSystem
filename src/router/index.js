@@ -71,6 +71,14 @@ export default new Router({
         {
           path: 'sfgl',
           component: sfgl
+        },
+        {
+          path: 'tdjd',
+          component: tdjd
+        },
+        {
+          path: 'ywjd',
+          component: ywjd
         }
       ]
     },
