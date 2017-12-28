@@ -112,10 +112,88 @@ app.post('/gzbx', function(req, res, next){
        });
     });
  });
-
-
-
-
+// 留言
+app.post('/ly', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.ly.insert, [param.title,param.type,param.content,param.date], function(err, result) {
+	        if(result) {      
+	            res.send('留言成功')  
+	        }else{
+      		    responseJSON(res, result);   
+	        }    
+        connection.release();  
+       });
+    });
+ });
+// 管理员登陆
+app.post('/adminlogin', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.admin.login, param.name, function(err, result) {
+	        if(result) {      
+	             result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+//获得公告数据
+app.get('/getgonggao', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.gonggao.select, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 获得留言数据
+app.get('/getly', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.ly.select, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+//获得故障数据
+app.get('/getgz', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.gzgl.select, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
 
 
 connection.end();

@@ -9,5 +9,20 @@ var sqlMap = {
 	},
 	zdcx: 'SELECT * FROM user_zd where user_name = ?',
 	gzbx: 'INSERT INTO ele_gzbx(address,type,date,content) VALUES (?,?,?,?)',
+	ly:{
+		select: 'SELECT * FROM ele_ly',
+		insert: 'INSERT INTO ele_ly(title,type,content,date) VALUES (?,?,?,?)'
+	},
+	// 管理员
+	admin:{
+		login: 'SELECT * FROM admin_login where loginname = ?'
+	},
+	gonggao:{
+		select: 'SELECT * FROM ele_gonggao'
+	},
+	gzgl:{
+		select: 'SELECT * FROM ele_gzbx'
+	}
+
 }
 module.exports = sqlMap;

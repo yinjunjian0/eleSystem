@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from 'axios'
 
 import user from '@/components/user'
 import login from '@/components/login'

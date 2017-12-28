@@ -69,6 +69,7 @@
 </template>
 <script>
 import axios from 'axios'
+
 export default {
     data () {
         return {
@@ -169,12 +170,21 @@ export default {
                             self.$Message.error('用户名不存在');
                           });
                     }else if(self.formInline.identity == '管理员'){
-                        if(self.formInline.user == 1 && self.formInline.password == 1){
-                            self.$Message.success('登陆成功');
-                            self.$router.push('admin')
-                        }else{
-                            self.$Message.error('用户名或密码错误');
-                        }
+                        axios.post('/api/adminlogin',{
+                            name: self.formInline.user,
+                        })
+                          .then(function (response) {
+                            console.log(response)
+                            if (password === response.data.data[0].user_password) {
+                                self.$Message.success('登陆成功');
+                                self.$router.push('admin')
+                            }else{
+                                self.$Message.error('用户名或密码错误');
+                            }
+                          })
+                          .catch(function (error) {
+                            self.$Message.error('管理员不存在');
+                          });
                     }else if(self.formInline.identity == '数据管理员'){
                         if(self.formInline.user == 1 && self.formInline.password == 1){
                             self.$Message.success('登陆成功');
