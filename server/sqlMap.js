@@ -22,6 +22,24 @@ var sqlMap = {
 	},
 	gzgl:{
 		select: 'SELECT * FROM ele_gzbx'
+	},
+	zd: {
+		insert: 'INSERT INTO user_zd(user_name,date,yongdian) VALUES (?,?,?)'
+	},
+	// 数据管理员
+	dataadmin:{
+		select: 'SELECT * FROM dataadmin_login where loginname = ?'
+	},
+	b:{
+		select:{
+			userlogin:'SELECT * FROM user_login'
+		},
+		insert:{
+			userlogin:'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)'
+		},
+		update:{
+			userlogin:'UPDATE user_login SET user_name = ? user_password =? user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? '
+		}
 	}
 
 }

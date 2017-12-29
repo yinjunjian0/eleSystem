@@ -194,6 +194,81 @@ app.get('/getgz', function(req, res, next){
        });
     });
  });
+// 插入账单数据
+app.post('/insertzd', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.zd.insert, [param.name,param.date,param.yongdian], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 数据管理员登陆
+app.post('/dataadmin', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.dataadmin.select, param.name, function(err, result) {
+	        if(result) {      
+	             result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result	,
+	            };  
+	        }     
+        responseJSON(res, result);   
+        connection.release();  
+       });
+    });
+ });
+
+// -------------------------------
+// 数据表
+// --------------------------------
+// 用户登陆表载入
+app.get('/b_userlogin', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.select.userlogin, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+//用户登陆表添加
+app.post('/b_userlogin_insert', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.insert.userlogin,[param.name,param.password,param.identity,param.email,param.phone,param.time], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+
+
+
 
 
 connection.end();

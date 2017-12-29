@@ -149,9 +149,9 @@ export default {
             var self = this
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    var name = this.formInline.user.toString()
+                    var password = this.formInline.password.toString()
                     if (this.formInline.identity == '用户') {
-                        var name = this.formInline.user.toString()
-                        var password = this.formInline.password.toString()
                         axios.post('/api/login',{
                             name: name,
                         })
@@ -175,7 +175,7 @@ export default {
                         })
                           .then(function (response) {
                             console.log(response)
-                            if (password === response.data.data[0].user_password) {
+                            if (password === response.data.data[0].password) {
                                 self.$Message.success('登陆成功');
                                 self.$router.push('admin')
                             }else{
@@ -186,12 +186,21 @@ export default {
                             self.$Message.error('管理员不存在');
                           });
                     }else if(self.formInline.identity == '数据管理员'){
-                        if(self.formInline.user == 1 && self.formInline.password == 1){
-                            self.$Message.success('登陆成功');
-                            self.$router.push('dataadmin')
-                        }else{
-                            self.$Message.error('用户名或密码错误');
-                        }
+                        axios.post('/api/dataadmin',{
+                            name: self.formInline.user,
+                        })
+                          .then(function (response) {
+                            console.log(response)
+                            if (password === response.data.data[0].password) {
+                                self.$Message.success('登陆成功');
+                                self.$router.push('dataadmin')
+                            }else{
+                                self.$Message.error('用户名或密码错误');
+                            }
+                          })
+                          .catch(function (error) {
+                            self.$Message.error('该数据管理员不存在');
+                          });
                     }
                 } else {
                     if (self.formInline.user == '' || self.formInline.password == '') {

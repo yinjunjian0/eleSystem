@@ -22,6 +22,11 @@ import lygl from '@/admin_pages/lygl'
 import gzgl from '@/admin_pages/gzgl'
 import fylr from '@/admin_pages/fylr'
 import sfgl from '@/admin_pages/sfgl'
+// dataadmin页面
+import dataadmin from '@/components/dataadmin'
+import b_userlogin from '@/dataadmin_pages/login'
+
+
 
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
@@ -112,6 +117,17 @@ export default new Router({
           path: 'sfgl',
           component: sfgl
         },
+      ]
+    },
+    {
+      path: '/dataadmin',
+      name: 'dataadmin',
+      component: dataadmin,
+      children: [
+        {
+          path: 'b_userlogin',
+          component: b_userlogin
+        }
       ]
     },
     {
