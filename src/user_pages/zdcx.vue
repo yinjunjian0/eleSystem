@@ -2,10 +2,10 @@
 	<div class="box">
 	    <p>
 	    	选择查询月份 : 
-	    	<DatePicker type="month" placeholder="Select month" style="width: 200px"></DatePicker>
+	    	<DatePicker type="month" placeholder="Select month" style="width: 200px" @on-change="setdate"></DatePicker>
 	    </p><br>
 	    <template>
-		    <Table :columns="columns1" :data="data1"></Table>
+		    <Table :columns="columns1" :data="data1" ></Table>
 		</template>
 	</div>
 </template>
@@ -46,12 +46,34 @@ export default {
             console.log(response.data.data)
             var arr = response.data.data
             for (var index in arr){
+                console.log(response.data.data[index].date)
                 self.data1.push(response.data.data[index])
             }
           })
           .catch(function (error) {
             self.$Message.error('未知错误');
           });     
+      },
+      methods:{
+        setdate(date){
+            var self = this
+            self.data1 = []
+            axios.post('/api/zdcx',{
+            name: localStorage.getItem("username"),
+            })
+              .then(function (response) {
+                console.log(response.data.data)
+                var arr = response.data.data
+                for (var index in arr){
+                    if(response.data.data[index].date == date){
+                        self.data1.push(response.data.data[index])
+                    }
+                }
+              })
+              .catch(function (error) {
+                self.$Message.error('未知错误');
+              });   
+        }
       }
 }
 </script>

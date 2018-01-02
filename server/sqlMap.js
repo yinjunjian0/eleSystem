@@ -32,16 +32,20 @@ var sqlMap = {
 	},
 	b:{
 		select:{
-			userlogin:'SELECT * FROM user_login'
+			userlogin:'SELECT * FROM user_login',
+			userzd:'SELECT * FROM user_zd'
 		},
 		insert:{
-			userlogin:'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)'
+			userlogin:'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)',
+			userzd:'INSERT INTO user_zd(user_name,date,yongdian) VALUES (?,?,?)'
 		},
 		update:{
-			userlogin:'UPDATE user_login SET user_name = ?,user_password =?, user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? '
+			userlogin:'UPDATE user_login SET user_name = ?,user_password =?, user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? ',
+			userzd:'UPDATE user_zd SET user_name = ? ,date = ?, yongdian = ? WHERE id = ? '
 		},
 		delete:{
-			userlogin:'DELETE FROM user_login WHERE id = ?'
+			userlogin:'DELETE FROM user_login WHERE id = ?',
+			userzd:'DELETE FROM user_zd WHERE id = ?'
 		}
 	}
 

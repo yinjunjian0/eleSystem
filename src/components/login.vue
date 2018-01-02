@@ -215,6 +215,7 @@ export default {
         regis(name) {
             var self = this
             var time = new Date().format("yyyy-MM-dd hh:mm:ss");
+            alert(time)
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     axios.post('/api/regis',{
@@ -227,7 +228,7 @@ export default {
                         })
                           .then(function (response) {
                             console.log(response)
-                            self.$Message.success(response.data);
+                            self.$Message.success('注册成功');
                           })
                           .catch(function (error) {
                             self.$Message.error('未知错误');

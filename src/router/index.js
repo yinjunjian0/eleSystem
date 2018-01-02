@@ -25,7 +25,7 @@ import sfgl from '@/admin_pages/sfgl'
 // dataadmin页面
 import dataadmin from '@/components/dataadmin'
 import b_userlogin from '@/dataadmin_pages/login'
-
+import b_userzd from '@/dataadmin_pages/user_zd'
 
 
 import iView from 'iview';
@@ -127,7 +127,11 @@ export default new Router({
         {
           path: 'b_userlogin',
           component: b_userlogin
-        }
+        },
+        {
+          path: 'b_userzd',
+          component: b_userzd
+        },
       ]
     },
     {

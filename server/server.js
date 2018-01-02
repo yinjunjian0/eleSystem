@@ -35,7 +35,7 @@ app.post('/login', function(req, res, next){
 	// 获取前台页面传过来的参数  
 	 	var param = req.body;   
 		// 建立连接 增加一个用户信息 
-		connection.query($sql.user.name, param.name, function(err, result) {
+		connection.query($sql.user.name, param.name.toString(), function(err, result) {
 	        if(result) {      
 	             result = {   
 	                code: 200,   
@@ -233,6 +233,7 @@ app.post('/dataadmin', function(req, res, next){
 // 数据表
 // --------------------------------
 // 用户登陆表载入
+// --------------------------------
 app.get('/b_userlogin', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
@@ -300,6 +301,87 @@ app.post('/b_userlogin_delete', function(req, res, next){
        });
     });
  });
+// --------------------------------
+// 用户账单表载入
+// --------------------------------
+app.get('/b_userzd', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.select.userzd, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+//用户账单表添加
+app.post('/b_userzd_insert', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.insert.userzd,[param.name,param.time,param.yongdian], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 用户账单更新
+app.post('/b_userzd_update', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.update.userzd,[param.name,param.time,param.yongdian,param.id], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 用户账单删除
+app.post('/b_userzd_delete', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.delete.userzd,param.id, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+
+
+
+
+
+
+
+
+
+
+
 
 
 connection.end();
