@@ -38,7 +38,10 @@ var sqlMap = {
 			userlogin:'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)'
 		},
 		update:{
-			userlogin:'UPDATE user_login SET user_name = ? user_password =? user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? '
+			userlogin:'UPDATE user_login SET user_name = ?,user_password =?, user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? '
+		},
+		delete:{
+			userlogin:'DELETE FROM user_login WHERE id = ?'
 		}
 	}
 

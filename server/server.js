@@ -266,9 +266,40 @@ app.post('/b_userlogin_insert', function(req, res, next){
        });
     });
  });
-
-
-
+// 用户登陆更新
+app.post('/b_userlogin_update', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.update.userlogin,[param.name,param.password,param.identity,param.email,param.phone,param.time,param.id], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 用户登陆删除
+app.post('/b_userlogin_delete', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.delete.userlogin,param.id, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
 
 
 connection.end();
