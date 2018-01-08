@@ -371,10 +371,61 @@ app.post('/b_userzd_delete', function(req, res, next){
        });
     });
  });
+// --------------------------------
+// 公告表载入
+// --------------------------------
+app.post('/b_gonggao_insert', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.insert.gonggao,[param.title,param.content,param.date], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+app.post('/b_gonggao_delete', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.delete.gonggao,param.id, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
 
-
-
-
+// --------------------------------
+// 留言表载入
+// --------------------------------
+app.post('/b_ly_delete', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.delete.ly,param.id, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
 
 
 

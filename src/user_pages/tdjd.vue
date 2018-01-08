@@ -4,13 +4,14 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
     export default {
         data () {
             return {
-                 modal1: false,
+                modal1: false,
                 columns1: [
                     {
-                        title: '停电通知',
+                        title: '通知',
                         key: 'title'
                     },
                     {
@@ -20,7 +21,7 @@
                     },
                     {
                         title: '查看内容',
-                        key: 'date',
+                        key: 'content',
                         width: 110,
                         render: (h, params) => {
                             return h('div', [
@@ -43,30 +44,32 @@
                     }
                 ],
                 data1: [
-                    {
-                        title: '碧桂园停水通知1',
-                        date: '2016-10-03'
-                    },
-                    {
-                        title: '碧桂园停水通知2',
-                        date: '2016-10-01'
-                    },
-                    {
-                        title: '碧桂园停水通知3',
-                        date: '2016-10-02'
-                    },
-                    {
-                        title: '碧桂园停水通知4',
-                        date: '2016-10-04'
-                    }
+                    
                 ]
             }
+        },
+        created:function(){
+            var self = this
+            axios.get('/api/getgonggao')
+              .then(function (response) {
+                let data = response.data.data
+                for (var index in data) {
+                    self.data1.push({
+                        title: data[index].title,
+                        date: data[index].date,
+                        content: data[index].content
+                    })
+                }
+              })
+              .catch(function (error) {
+                self.$Message.error('未知错误');
+              });        
         },
         methods: {
             show (index) {
                 this.$Modal.info({
                     title: '内容',
-                    content: `${this.data1[index].title}`
+                    content: `<strong>${this.data1[index].title}</strong><br><br>` + `${this.data1[index].content}`
                 })
             },
         }

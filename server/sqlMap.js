@@ -37,7 +37,8 @@ var sqlMap = {
 		},
 		insert:{
 			userlogin:'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)',
-			userzd:'INSERT INTO user_zd(user_name,date,yongdian) VALUES (?,?,?)'
+			userzd:'INSERT INTO user_zd(user_name,date,yongdian) VALUES (?,?,?)',
+			gonggao:'INSERT INTO ele_gonggao(title,content,date) VALUES (?,?,?)',
 		},
 		update:{
 			userlogin:'UPDATE user_login SET user_name = ?,user_password =?, user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? ',
@@ -45,7 +46,9 @@ var sqlMap = {
 		},
 		delete:{
 			userlogin:'DELETE FROM user_login WHERE id = ?',
-			userzd:'DELETE FROM user_zd WHERE id = ?'
+			userzd:'DELETE FROM user_zd WHERE id = ?',
+			gonggao:'DELETE FROM ele_gonggao WHERE id = ?',
+			ly:'DELETE FROM ele_ly WHERE id = ?',
 		}
 	}
 

@@ -2,11 +2,16 @@
     <Table :columns="columns1" :data="data1"></Table>
 </template>
 <script>
+import axios from 'axios'
     export default {
         data () {
             return {
                 modal1: false,
                 columns1: [
+                    {
+                        title: '用户名',
+                        key: 'name'
+                    },
                     {
                         title: '问题',
                         key: 'title'
@@ -22,13 +27,29 @@
                     },
                 ],
                 data1: [
-                    {
-                        title: '碧桂园停水通知',
-                        date: '2016-10-03',
-                        jindu: '处理中',
-                    },
+                    
                 ]
             }
-        }
+        },
+        created:function(){
+            var self = this
+            axios.get('/api/getgz')
+              .then(function (response) {
+                let data = response.data.data
+                console.log(data)
+                for (var index in data) {
+                    self.data1.push({
+                        name: data[index].name,
+                        title: data[index].content,
+                        date: data[index].date,
+                        jindu: data[index].progress
+                    })
+                }
+              })
+              .catch(function (error) {
+                self.$Message.error('未知错误');
+              });  
+        },
+
     }
 </script>

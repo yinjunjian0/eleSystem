@@ -1,2 +1,12 @@
 ﻿1. 日期保存后出现少一日的情况.
 解决方法: 数据库 数据改为varchar 长度为10 即显示正常.
+
+2.v-if v-show 区别
+v-show : 只是简单的 display 的修改
+v-if : dom树的增删
+
+3.Vue 监听数值变化
+vm.$watch('a', function (newValue, oldValue) {
+  // 这个回调将在 `vm.a` 改变后调用
+})
+
