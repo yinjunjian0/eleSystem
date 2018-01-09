@@ -229,6 +229,24 @@ app.post('/dataadmin', function(req, res, next){
     });
  });
 
+// 修改密码
+app.post('/xgmm', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.xgmm.update, [param.new,param.name], function(err, result) {
+	        if(result) {      
+	             result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result	,
+	            };  
+	        }     
+        responseJSON(res, result);   
+        connection.release();  
+       });
+    });
+ });
+
 // -------------------------------
 // 数据表
 // --------------------------------
@@ -414,6 +432,26 @@ app.post('/b_ly_delete', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
 		connection.query($sql.b.delete.ly,param.id, function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }     
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+
+// --------------------------------
+// 记录表载入
+// --------------------------------
+app.get('/b_record_select', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.select.userrecord, function(err, result) {
 	        if(result) {      
 	            result = {   
 	                code: 200,   

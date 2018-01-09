@@ -13,6 +13,9 @@ var sqlMap = {
 		select: 'SELECT * FROM ele_ly',
 		insert: 'INSERT INTO ele_ly(title,type,content,date) VALUES (?,?,?,?)'
 	},
+	xgmm:{
+		update: 'UPDATE user_login SET user_password = ? WHERE user_name = ?'
+	},
 	// 管理员
 	admin:{
 		login: 'SELECT * FROM admin_login where loginname = ?'
@@ -33,7 +36,8 @@ var sqlMap = {
 	b:{
 		select:{
 			userlogin:'SELECT * FROM user_login',
-			userzd:'SELECT * FROM user_zd'
+			userzd:'SELECT * FROM user_zd',
+			userrecord:'SELECT * FROM user_record',
 		},
 		insert:{
 			userlogin:'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)',

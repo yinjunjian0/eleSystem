@@ -2,14 +2,14 @@
   <div class="box">
       <p>
         选择查询月份 : 
-        <DatePicker type="month" placeholder="Select month" style="width: 200px"></DatePicker>
+        <DatePicker type="month" placeholder="选择月份" style="width: 200px"></DatePicker>
       </p><br>
-      <template>
-        <Table :columns="columns1" :data="data1"></Table>
-    </template>
+      <h3>以下账单为已缴清数据。</h3><br>
+      <Table :columns="columns1" :data="data1"></Table>
   </div>
 </template>
 <script>
+import axios from 'axios'
     export default {
         data () {
             return {
@@ -23,33 +23,33 @@
                         key: 'month'
                     },
                     {
-                        title: '用电',
+                        title: '用电(度)',
                         key: 'yongdian'
                     }
                 ],
                 data1: [
-                    {
-                        name: 'John Brown',
-                        yongdian: 18,
-                        month: '2016-10-03'
-                    },
-                    {
-                        name: 'Jim Green',
-                        yongdian: 24,
-                        month: '2016-10-01'
-                    },
-                    {
-                        name: 'Joe Black',
-                        yongdian: 30,
-                        month: '2016-10-02'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        yongdian: 26,
-                        month: '2016-10-04'
-                    }
+
                 ]
             }
+        },
+        created:function(){
+            var self = this
+            axios.get('/api/b_record_select')
+              .then(function (response) {
+                console.log(response.data.data)
+                let data  = response.data.data
+                for (var index in data) {
+                    self.data1.push({
+                        name: data[index].user_name,
+                        month: data[index].date,
+                        yongdian: data[index].dianfei,
+                        yorn: data[index].yorn,
+                    })
+                }
+              })
+              .catch(function (error) {
+                self.$Message.error('未知错误');
+              }); 
         },
         methods:{
           
