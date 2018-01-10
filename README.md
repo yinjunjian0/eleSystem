@@ -3,15 +3,14 @@
 > gra-project
 
 # 该项目用的是mysql数据库
+
 # elesystem.sql在自己的navicat(其他工具也可)跑一下就好
 
 
-# 先install后run dev即可
+# 运行项目
 
-# install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
 npm run dev
 
 
