@@ -1,21 +1,26 @@
 # elesystem
 
 > gra-project
+## 该项目用的是mysql数据库
+## elesystem.sql在自己的navicat(其他工具也可)跑一下就好
 
-## Build Setup
 
-``` bash
+## 先install后run dev即可
+
 # install dependencies
 npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 服务器在server文件夹下
+
+在当前文件下运行一下命令即可
+
+node server
+
+## 服务器在8001端口 注意不要冲突
+
+
