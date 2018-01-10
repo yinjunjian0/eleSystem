@@ -3,7 +3,7 @@
 > gra-project
 
 
---该项目用的是mysql数据库
+---该项目用的是mysql数据库
 
 <font size="4">elesystem.sql在自己的navicat(其他工具也可)跑一下就好</font>
 
