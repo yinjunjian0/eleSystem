@@ -198,7 +198,91 @@ app.get('/getgz', function(req, res, next){
 app.post('/insertzd', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
-		connection.query($sql.zd.insert, [param.name,param.date,param.yongdian], function(err, result) {
+		connection.query($sql.b.insert.user_jumin_zd, [param.name,param.date,param.gu,param.feng,param.ping,param.yongdian,param.dianfei], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+app.post('/insert_gongyezd', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.insert.user_gongye_zd, [param.name,param.date,param.yongdian,param.dianfei], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 修改故障进度
+app.post('/update_gzbx', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.gzbx.update, [param.jindu,param.updatetime,param.id], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 根据名字获取账单数据
+app.post('/selectname_juminzd', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.user_jumin_zd.select, [param.name], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 根据名字修改余额
+app.post('/updateyue', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.xgmm.updateyue, [param.yue,param.name], function(err, result) {
+	        if(result) {      
+	            result = {   
+	                code: 200,   
+	                msg:'成功',
+	                data:result
+	            };  
+	        }
+        responseJSON(res, result);   
+       connection.release();  
+       });
+    });
+ });
+// 记录收费
+app.post('/insertrecord', function(req, res, next){
+	pool.getConnection(function(err, connection) { 
+	 	var param = req.body;   
+		connection.query($sql.b.insert.userrecord, [param.name,param.date,param.dianfei], function(err, result) {
 	        if(result) {      
 	            result = {   
 	                code: 200,   
@@ -322,10 +406,10 @@ app.post('/b_userlogin_delete', function(req, res, next){
 // --------------------------------
 // 用户账单表载入
 // --------------------------------
-app.get('/b_userzd', function(req, res, next){
+app.get('/b_user_jumin_zd', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
-		connection.query($sql.b.select.userzd, function(err, result) {
+		connection.query($sql.b.select.user_jumin_zd, function(err, result) {
 	        if(result) {      
 	            result = {   
 	                code: 200,   
@@ -339,10 +423,10 @@ app.get('/b_userzd', function(req, res, next){
     });
  });
 //用户账单表添加
-app.post('/b_userzd_insert', function(req, res, next){
+app.post('/b_user_jumin_zd_insert', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
-		connection.query($sql.b.insert.userzd,[param.name,param.time,param.yongdian], function(err, result) {
+		connection.query($sql.b.insert.user_jumin_zd,[param.name,param.time,param.yongdian], function(err, result) {
 	        if(result) {      
 	            result = {   
 	                code: 200,   
@@ -356,10 +440,10 @@ app.post('/b_userzd_insert', function(req, res, next){
     });
  });
 // 用户账单更新
-app.post('/b_userzd_update', function(req, res, next){
+app.post('/b_user_jumin_zd_update', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
-		connection.query($sql.b.update.userzd,[param.name,param.time,param.yongdian,param.id], function(err, result) {
+		connection.query($sql.b.update.user_jumin_zd,[param.name,param.time,param.yongdian,param.id], function(err, result) {
 	        if(result) {      
 	            result = {   
 	                code: 200,   
@@ -373,10 +457,10 @@ app.post('/b_userzd_update', function(req, res, next){
     });
  });
 // 用户账单删除
-app.post('/b_userzd_delete', function(req, res, next){
+app.post('/b_user_jumin_zd_delete', function(req, res, next){
 	pool.getConnection(function(err, connection) { 
 	 	var param = req.body;   
-		connection.query($sql.b.delete.userzd,param.id, function(err, result) {
+		connection.query($sql.b.delete.user_jumin_zd,param.id, function(err, result) {
 	        if(result) {      
 	            result = {   
 	                code: 200,   

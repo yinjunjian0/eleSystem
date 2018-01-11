@@ -48,7 +48,7 @@
             </FormItem>
             
             <h3>当前电费为 : {{ gongyetotal }} 元</h3><br>
-            <Button type="primary" @click="sub('formItem')">提交</Button>
+            <Button type="primary" @click="gongyesub('formItem')">提交</Button>
         </Form>
             
     </div>
@@ -87,11 +87,38 @@ import axios from 'axios'
                 return (parseInt(this.formItem.gu) * 0.6 + parseInt(this.formItem.feng) * 0.8 + parseInt(this.formItem.ping) * 0.7).toFixed(2)
             },
             gongyetotal(){
-                return (parseInt(this.formItem.yongdian) * 0.6).toFixed(2)
+                let yd = this.formItem.yongdian
+                if (parseInt(yd) > 35000) {
+                    return 29500 + (yd - 35000) * 0.75
+                }
+                if (parseInt(yd) > 20000) {
+                    return 17500 + (yd - 20000) * 0.8
+                }
+                if (parseInt(yd) > 10000) {
+                    return 9000 + (yd - 10000) * 0.85
+                }
+                return parseInt(yd) * 0.9
+            },
+            yongdian(){
+                return (parseInt(this.formItem.gu) + parseInt(this.formItem.feng) + parseInt(this.formItem.ping))
             }
         },
         created:function(){
-
+            Date.prototype.Format = function (fmt) { //author: meizz 
+                var o = {
+                    "M+": this.getMonth() + 1, //月份 
+                    "d+": this.getDate(), //日 
+                    "h+": this.getHours(), //小时 
+                    "m+": this.getMinutes(), //分 
+                    "s+": this.getSeconds(), //秒 
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                    "S": this.getMilliseconds() //毫秒 
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
         },
         methods:{
             sub(a){
@@ -101,7 +128,32 @@ import axios from 'axios'
                         axios.post('/api/insertzd',{
                             name: self.formItem.name,
                             date: self.formItem.date,
-                            yongdian:self.formItem.yongdian,
+                            gu: parseInt(self.formItem.gu),
+                            feng: parseInt(self.formItem.feng),
+                            ping: parseInt(self.formItem.ping),
+                            yongdian:parseInt(self.yongdian),
+                            dianfei:self.jumintotal
+                        })
+                          .then(function (response) {
+                            self.$Message.success('添加成功');
+                          })
+                          .catch(function (error) {
+                            self.$Message.error('未知错误');
+                          });
+                    }else {
+                        this.$Message.error('添加失败, 注意填写要求');
+                    }
+                })
+            },
+            gongyesub(a){
+                this.$refs[a].validate((valid) => {
+                    if (valid) {
+                        var self = this
+                        axios.post('/api/insert_gongyezd',{
+                            name: self.formItem.name,
+                            date: self.formItem.date,
+                            yongdian:parseInt(self.formItem.yongdian),
+                            dianfei:self.gongyetotal
                         })
                           .then(function (response) {
                             self.$Message.success('添加成功');
@@ -116,6 +168,7 @@ import axios from 'axios'
             },
             setdate(date){
                 this.formItem.date = date
+                alert(1)
                 },
             }
         }
