@@ -19,6 +19,8 @@
 
 #### 数据库配置在server/db文件下,修改一下即可
 
+![avatar](/src/assets/数据库配置图片.png)
+
 #### 在当前文件下运行一下命令即可
 
 > node server
