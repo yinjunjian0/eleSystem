@@ -26,7 +26,13 @@ import sfgl from '@/admin_pages/sfgl'
 import dataadmin from '@/components/dataadmin'
 import b_userlogin from '@/dataadmin_pages/login'
 import b_userzd from '@/dataadmin_pages/user_zd'
-
+import b_usergyzd from '@/dataadmin_pages/user_gyzd'
+import b_gzgl from '@/dataadmin_pages/user_gzgl'
+import b_userjfjl from '@/dataadmin_pages/user_jfjl'
+import b_adminzh from '@/dataadmin_pages/adminzh'
+import b_gggl from '@/dataadmin_pages/gggl'
+import b_lygl from '@/dataadmin_pages/lygl'
+import b_dataadmin from '@/dataadmin_pages/dataadmin'
 
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
@@ -131,6 +137,34 @@ export default new Router({
         {
           path: 'b_userzd',
           component: b_userzd
+        },
+        {
+          path: 'b_usergyzd',
+          component: b_usergyzd
+        },
+        {
+          path: 'b_usergzgl',
+          component: b_gzgl
+        },
+        {
+          path: 'b_userjfjl',
+          component: b_userjfjl
+        },
+        {
+          path: 'adminzh',
+          component: b_adminzh
+        },
+        {
+          path: 'gggl',
+          component: b_gggl
+        },
+        {
+          path: 'lygl',
+          component: b_lygl
+        },
+        {
+          path: 'dataadmin',
+          component: b_dataadmin
         },
       ]
     },

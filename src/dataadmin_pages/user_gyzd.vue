@@ -8,21 +8,6 @@
                         <Icon type="ios-person-outline" slot="prepend"></Icon>
                     </Input>
                 </FormItem>
-                <FormItem prop="gu" label="谷段">
-                    <Input type="text" v-model="formInline.gu" >
-                        <Icon type="ios-person-outline" slot="prepend"></Icon>
-                    </Input>
-                </FormItem>
-                <FormItem prop="feng" label="峰段">
-                    <Input type="text" v-model="formInline.feng" >
-                        <Icon type="ios-person-outline" slot="prepend"></Icon>
-                    </Input>
-                </FormItem>
-                <FormItem prop="ping" label="平段">
-                    <Input type="text" v-model="formInline.ping" >
-                        <Icon type="ios-person-outline" slot="prepend"></Icon>
-                    </Input>
-                </FormItem>
                 <FormItem prop="yongdian" label="用电量">
                     <Input type="text" v-model="formInline.yongdian" >
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
@@ -46,21 +31,6 @@
                 <FormItem prop="user" label="用户名">
                     <Input type="text" v-model="formInline.user" >
                         <Icon type="ios-person-outline" slot="prepend"></Icon>
-                    </Input>
-                </FormItem>
-                <FormItem prop="feng" label="峰段">
-                    <Input type="text" v-model="formInline.feng" >
-                        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-                    </Input>
-                </FormItem>
-                <FormItem prop="gu" label="谷段">
-                    <Input type="text" v-model="formInline.gu" >
-                        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-                    </Input>
-                </FormItem>
-                <FormItem prop="ping" label="平段">
-                    <Input type="text" v-model="formInline.ping" >
-                        <Icon type="ios-locked-outline" slot="prepend"></Icon>
                     </Input>
                 </FormItem>
                 <FormItem prop="yongdian" label="用电量">
@@ -119,18 +89,6 @@ export default {
           key: "name"
         },
         {
-          title: "峰段",
-          key: "feng"
-        },
-        {
-          title: "谷段",
-          key: "gu"
-        },
-        {
-          title: "平段",
-          key: "ping"
-        },
-        {
           title: "用电量(度)",
           key: "yongdian"
         },
@@ -147,18 +105,12 @@ export default {
       formInline: {
         user: "",
         date: "",
-        gu: "",
-        feng: "",
-        ping: "",
         id: "",
         yongdian: "",
         dianfei: ""
       },
       ruleInline: {
         user: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-        gu: [{ required: true, message: "请输入谷段", trigger: "blur" }],
-        feng: [{ required: true, message: "请输入峰段", trigger: "blur" }],
-        ping: [{ required: true, message: "请输入平段", trigger: "blur" }],
         yongdian: [{ required: true, message: "请输入用电", trigger: "blur" }],
         dianfei: [{ required: true, message: "请输入电费", trigger: "blur" }]
       }
@@ -179,12 +131,9 @@ export default {
         if (valid) {
           if (this.exDate()) {
             axios
-              .post("/api/b_user_jumin_zd_insert", {
+              .post("/api/b_user_gongye_zd_insert", {
                 name: self.formInline.user,
                 time: self.formInline.date,
-                gu: self.formInline.gu,
-                feng: self.formInline.feng,
-                ping: self.formInline.ping,
                 yongdian: self.formInline.yongdian,
                 dianfei: self.formInline.dianfei
               })
@@ -209,12 +158,9 @@ export default {
         if (valid) {
           if (this.exDate()) {
             axios
-              .post("/api/b_user_jumin_zd_update", {
+              .post("/api/b_user_gongye_zd_update", {
                 name: self.formInline.user,
                 time: self.formInline.date,
-                gu: self.formInline.gu,
-                feng: self.formInline.feng,
-                ping: self.formInline.ping,
                 yongdian: self.formInline.yongdian,
                 dianfei: self.formInline.dianfei,
                 id: self.formInline.id
@@ -237,7 +183,7 @@ export default {
     deltesubmit() {
       var self = this;
       axios
-        .post("/api/b_user_jumin_zd_delete", {
+        .post("/api/b_user_gongye_zd_delete", {
           id: self.formInline.id
         })
         .then(function(response) {
@@ -278,9 +224,6 @@ export default {
     },
     getRow(currentRow) {
       this.formInline.user = currentRow.name;
-      this.formInline.gu = currentRow.gu;
-      this.formInline.feng = currentRow.feng;
-      this.formInline.ping = currentRow.ping;
       this.formInline.dianfei = currentRow.dianfei;
       this.formInline.yongdian = currentRow.yongdian;
       console.log(currentRow.date.toString().substring(0, 10));
@@ -299,16 +242,13 @@ export default {
       this.formInline.date = "";
       var self = this;
       axios
-        .get("/api/b_user_jumin_zd")
+        .get("/api/b_user_gongye_zd")
         .then(function(response) {
           var data = response.data.data;
           for (var index in data) {
             self.data1.push({
               id: data[index].id,
               name: data[index].user_name,
-              feng: data[index].feng,
-              gu: data[index].gu,
-              ping: data[index].ping,
               yongdian: data[index].yongdian,
               dianfei: data[index].dianfei,
               date: data[index].date

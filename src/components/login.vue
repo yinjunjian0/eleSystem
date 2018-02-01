@@ -68,193 +68,200 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-    data () {
-        return {
-            modal2: false,
-            modal_loading: false,
-            formInline: {
-                user: '',
-                password: '',
-                identity: '',
-            },
-            ruleInline: {
-                user: [
-                    { required: true, message: '请输入账号', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                    { type: 'string', min: 1, message: '密码至少为6位', trigger: 'blur' }
-                ],
-                identity: [
-                    { required: true, message: '请选择身份', trigger: 'change' },
-                ]
-            },
-            // 注册
-            regisinline: {
-                user: '',
-                password: '',
-                phone: '',
-                email: '',
-                identity: ''
-            },
-            regisrule: {
-                user: [
-                    { required: true, message: '请输入账号', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                    { type: 'string', min: 6, message: '密码至少为6位', trigger: 'blur' }
-                ],
-                phone: [
-                    { required: true, message: '请输入手机', trigger: 'blur' },
-                    { type: 'string', min: 11, message: '手机为11位数字', trigger: 'blur' }
-                ],
-                email: [
-                    { required: true, message: '请输入邮箱', trigger: 'blur' }
-                ],
-                identity: [
-                    { required: true, message: '请选择身份', trigger: 'change' },
-                ]
-            },
+  data() {
+    return {
+      modal2: false,
+      modal_loading: false,
+      formInline: {
+        user: "",
+        password: "",
+        identity: ""
+      },
+      ruleInline: {
+        user: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { type: "string", min: 1, message: "密码至少为6位", trigger: "blur" }
+        ],
+        identity: [{ required: true, message: "请选择身份", trigger: "change" }]
+      },
+      // 注册
+      regisinline: {
+        user: "",
+        password: "",
+        phone: "",
+        email: "",
+        identity: ""
+      },
+      regisrule: {
+        user: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { type: "string", min: 6, message: "密码至少为6位", trigger: "blur" }
+        ],
+        phone: [
+          { required: true, message: "请输入手机", trigger: "blur" },
+          {
+            type: "string",
+            min: 11,
+            message: "手机为11位数字",
+            trigger: "blur"
+          }
+        ],
+        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+        identity: [{ required: true, message: "请选择身份", trigger: "change" }]
+      }
+    };
+  },
+  created: function() {
+    Date.prototype.format = function(fmt) {
+      var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        S: this.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(
+          RegExp.$1,
+          (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+        );
+      }
+      for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length == 1
+              ? o[k]
+              : ("00" + o[k]).substr(("" + o[k]).length)
+          );
         }
-    },
-    created:function(){
-        Date.prototype.format = function(fmt) { 
-             var o = { 
-                "M+" : this.getMonth()+1,                 //月份 
-                "d+" : this.getDate(),                    //日 
-                "h+" : this.getHours(),                   //小时 
-                "m+" : this.getMinutes(),                 //分 
-                "s+" : this.getSeconds(),                 //秒 
-                "q+" : Math.floor((this.getMonth()+3)/3), //季度 
-                "S"  : this.getMilliseconds()             //毫秒 
-            }; 
-            if(/(y+)/.test(fmt)) {
-                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-            }
-             for(var k in o) {
-                if(new RegExp("("+ k +")").test(fmt)){
-                     fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-                 }
-             }
-            return fmt; 
-        }   
-
-    },
-    methods: {
-        handleSubmit(name) {
-            var self = this
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    var name = this.formInline.user.toString()
-                    var password = this.formInline.password.toString()
-                    if (this.formInline.identity == '用户') {
-                        axios.post('/api/login',{
-                            name: name,
-                        })
-                          .then(function (response) {
-                            console.log(response)
-                            if (password === response.data.data[0].user_password) {
-                                self.$Message.success('登陆成功');
-                                self.$router.push('user')
-                                localStorage.setItem('identity', '用户');
-                                localStorage.setItem('username', name);
-                            }else{
-                                self.$Message.error('用户名或密码错误');
-                            }
-                          })
-                          .catch(function (error) {
-                            self.$Message.error('用户名不存在');
-                          });
-                    }else if(self.formInline.identity == '管理员'){
-                        axios.post('/api/adminlogin',{
-                            name: self.formInline.user,
-                        })
-                          .then(function (response) {
-                            console.log(response)
-                            if (password === response.data.data[0].password) {
-                                self.$Message.success('登陆成功');
-                                self.$router.push('admin')
-                            }else{
-                                self.$Message.error('用户名或密码错误');
-                            }
-                          })
-                          .catch(function (error) {
-                            self.$Message.error('管理员不存在');
-                          });
-                    }else if(self.formInline.identity == '数据管理员'){
-                        axios.post('/api/dataadmin',{
-                            name: self.formInline.user,
-                        })
-                          .then(function (response) {
-                            console.log(response)
-                            if (password === response.data.data[0].password) {
-                                self.$Message.success('登陆成功');
-                                self.$router.push('dataadmin')
-                            }else{
-                                self.$Message.error('用户名或密码错误');
-                            }
-                          })
-                          .catch(function (error) {
-                            self.$Message.error('该数据管理员不存在');
-                          });
-                    }
+      }
+      return fmt;
+    };
+  },
+  methods: {
+    handleSubmit(name) {
+      var self = this;
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          var name = this.formInline.user.toString();
+          var password = this.formInline.password.toString();
+          if (this.formInline.identity == "用户") {
+            axios
+              .post("/api/login", {
+                name: name
+              })
+              .then(function(response) {
+                console.log(response);
+                if (password === response.data.data[0].user_password) {
+                  self.$Message.success("登陆成功");
+                  self.$router.push("user");
+                  localStorage.setItem("identity", "用户");
+                  localStorage.setItem("username", name);
                 } else {
-                    if (self.formInline.user == '' || self.formInline.password == '') {
-                        self.$Message.error('用户名或密码不能为空');
-
-                    }else if(self.formInline.identity == ''){
-                        self.$Message.error('请选择身份');
-                    }
+                  self.$Message.error("用户名或密码错误");
                 }
-            })
-        },
-        regis(name) {
-            var self = this
-            var time = new Date().format("yyyy-MM-dd hh:mm:ss");
-            alert(time)
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    axios.post('/api/regis',{
-                            name: this.regisinline.user,
-                            password: this.regisinline.password,
-                            identity: this.regisinline.identity,
-                            email: this.regisinline.email,
-                            phone: this.regisinline.phone,
-                            time: time
-                        })
-                          .then(function (response) {
-                            console.log(response)
-                            self.$Message.success('注册成功');
-                          })
-                          .catch(function (error) {
-                            self.$Message.error('未知错误');
-                          });                    
+              })
+              .catch(function(error) {
+                self.$Message.error("用户名不存在");
+              });
+          } else if (self.formInline.identity == "管理员") {
+            axios
+              .post("/api/adminlogin", {
+                name: self.formInline.user
+              })
+              .then(function(response) {
+                console.log(response);
+                if (password === response.data.data[0].password) {
+                  self.$Message.success("登陆成功");
+                  self.$router.push("admin");
                 } else {
-                    this.$Message.error('注册失败, 注意填写要求');
+                  self.$Message.error("用户名或密码错误");
                 }
-            })
+              })
+              .catch(function(error) {
+                self.$Message.error("管理员不存在");
+              });
+          } else if (self.formInline.identity == "数据管理员") {
+            axios
+              .post("/api/dataadmin", {
+                name: self.formInline.user
+              })
+              .then(function(response) {
+                console.log(response);
+                if (password === response.data.data[0].password) {
+                  self.$Message.success("登陆成功");
+                  self.$router.push("dataadmin");
+                } else {
+                  self.$Message.error("用户名或密码错误");
+                }
+              })
+              .catch(function(error) {
+                self.$Message.error("该数据管理员不存在");
+              });
+          }
+        } else {
+          if (self.formInline.user == "" || self.formInline.password == "") {
+            self.$Message.error("用户名或密码不能为空");
+          } else if (self.formInline.identity == "") {
+            self.$Message.error("请选择身份");
+          }
         }
+      });
+    },
+    regis(name) {
+      var self = this;
+      var time = new Date().format("yyyy-MM-dd hh:mm:ss");
+      alert(time);
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          axios
+            .post("/api/regis", {
+              name: this.regisinline.user,
+              password: this.regisinline.password,
+              identity: this.regisinline.identity,
+              email: this.regisinline.email,
+              phone: this.regisinline.phone,
+              time: time
+            })
+            .then(function(response) {
+              console.log(response);
+              self.$Message.success("注册成功");
+            })
+            .catch(function(error) {
+              self.$Message.error("未知错误");
+            });
+        } else {
+          this.$Message.error("注册失败, 注意填写要求");
+        }
+      });
     }
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.box{
-    width: 100%;
-    height: 1200px;
-    background: linear-gradient(to top, AliceBlue, Lavender);
-    overflow: hidden;
+.box {
+  width: 100%;
+  height: 800px;
+  background: linear-gradient(to top, AliceBlue, Lavender);
+  overflow: hidden;
+  background: url(../assets/bg.jpg);
+  background-size: 100%;
+  overflow: hidden;
 }
-.Card{
-    width: 400px;
-    margin: 0 auto;
-    margin-top: 200px;
-    text-align: center;
+.Card {
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 200px;
+  text-align: center;
 }
-
 </style>  
