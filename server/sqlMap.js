@@ -42,11 +42,13 @@ var sqlMap = {
 	},
 	b: {
 		select: {
+			userloginex: 'SELECT count( * ) as count FROM user_login WHERE `user_name` = ?', //查询知否存在
 			userlogin: 'SELECT * FROM user_login',
 			user_jumin_zd: 'SELECT * FROM user_juminzd',
 			user_gongye_zd: 'SELECT * FROM user_gongyezd',
 			user_gzgl: 'SELECT * FROM ele_gzbx',
 			userrecord: 'SELECT * FROM user_record',
+			userrecordwhere: 'SELECT * FROM user_record where user_name = ?',
 			admin_zh: 'SELECT * FROM admin_login',
 			admin_gggl: 'SELECT * FROM ele_gonggao',
 			admin_lygl: 'SELECT * FROM ele_ly',

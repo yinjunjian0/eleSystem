@@ -353,6 +353,22 @@ app.get('/b_userlogin', function (req, res, next) {
 		});
 	});
 });
+app.post('/b_userloginex', function (req, res, next) {
+	pool.getConnection(function (err, connection) {
+		var param = req.body;
+		connection.query($sql.b.select.userloginex, param.name, function (err, result) {
+			if (result) {
+				result = {
+					code: 200,
+					msg: '成功',
+					data: result
+				};
+			}
+			responseJSON(res, result);
+			connection.release();
+		});
+	});
+});
 //用户登陆表添加
 app.post('/b_userlogin_insert', function (req, res, next) {
 	pool.getConnection(function (err, connection) {
@@ -638,6 +654,23 @@ app.post('/b_user_jfjl_insert', function (req, res, next) {
 	pool.getConnection(function (err, connection) {
 		var param = req.body;
 		connection.query($sql.b.insert.userrecord, [param.name, param.date, param.dianfei], function (err, result) {
+			if (result) {
+				result = {
+					code: 200,
+					msg: '成功',
+					data: result
+				};
+			}
+			responseJSON(res, result);
+			connection.release();
+		});
+	});
+});
+// 查询 - user
+app.post('/b_record_select_where', function (req, res, next) {
+	pool.getConnection(function (err, connection) {
+		var param = req.body;
+		connection.query($sql.b.select.userrecordwhere, param.name, function (err, result) {
 			if (result) {
 				result = {
 					code: 200,

@@ -2,7 +2,7 @@
 	<div class="box">
 	    <p>
 	    	选择查询月份 : 
-	    	<DatePicker type="month" placeholder="Select month" style="width: 200px" @on-change="setdate"></DatePicker>
+	    	<DatePicker type="month" placeholder="选择查询月份" style="width: 200px" @on-change="setdate"></DatePicker>
 	    </p><br>
 	    <template>
 		    <Table :columns="columns1" :data="data1" ></Table>
@@ -10,77 +10,81 @@
 	</div>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
-    data () {
-        return {
-            columns1: [
-                {
-                    title: '用户名',
-                    key: 'user_name'
-                },
-                {
-                    title: '月份',
-                    key: 'date'
-                },
-                {
-                    title: '用电',
-                    key: 'yongdian'
-                }
-            ],
-            data1: [
-                // {
-                //     name: 'John Brown',
-                //     yongdian: 18,
-                //     month: '2016-10-03'
-                // }
-            ]
+  data() {
+    return {
+      columns1: [
+        {
+          title: "用户名",
+          key: "user_name"
+        },
+        {
+          title: "月份",
+          key: "date"
+        },
+        {
+          title: "用电",
+          key: "yongdian"
         }
-    },
-    created:function(){
-        var self = this
-        axios.post('/api/zdcx',{
-            name: localStorage.getItem("username"),
+      ],
+      data1: [
+        // {
+        //     name: 'John Brown',
+        //     yongdian: 18,
+        //     month: '2016-10-03'
+        // }
+      ]
+    };
+  },
+  created: function() {
+    var self = this;
+    axios
+      .post("/api/zdcx", {
+        name: localStorage.getItem("username")
+      })
+      .then(function(response) {
+        console.log(response.data.data);
+        var arr = response.data.data;
+        for (var index in arr) {
+          console.log(response.data.data[index].date);
+          self.data1.push(response.data.data[index]);
+        }
+      })
+      .catch(function(error) {
+        self.$Message.error("未知错误");
+      });
+  },
+  methods: {
+    setdate(date) {
+      var self = this;
+      self.data1 = [];
+      axios
+        .post("/api/zdcx", {
+          name: localStorage.getItem("username")
         })
-          .then(function (response) {
-            console.log(response.data.data)
-            var arr = response.data.data
-            for (var index in arr){
-                console.log(response.data.data[index].date)
-                self.data1.push(response.data.data[index])
+        .then(function(response) {
+          console.log(response.data.data);
+          var arr = response.data.data;
+          for (var index in arr) {
+            if (response.data.data[index].date == date) {
+              self.data1.push(response.data.data[index]);
             }
-          })
-          .catch(function (error) {
-            self.$Message.error('未知错误');
-          });     
-      },
-      methods:{
-        setdate(date){
-            var self = this
-            self.data1 = []
-            axios.post('/api/zdcx',{
-            name: localStorage.getItem("username"),
-            })
-              .then(function (response) {
-                console.log(response.data.data)
-                var arr = response.data.data
-                for (var index in arr){
-                    if(response.data.data[index].date == date){
-                        self.data1.push(response.data.data[index])
-                    }
-                }
-              })
-              .catch(function (error) {
-                self.$Message.error('未知错误');
-              });   
-        }
-      }
-}
+          }
+        })
+        .catch(function(error) {
+          self.$Message.error("未知错误");
+        });
+    }
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.box{
-	text-align: center;width:400px;margin:auto;
+.box {
+  text-align: center;
+  width: 400px;
+  margin: auto;
 }
 </style>  

@@ -35,7 +35,7 @@
                                 </Input>
                             </FormItem>
                             <FormItem prop="password">
-                                <Input type="text" v-model="regisinline.password" placeholder="请输入密码">
+                                <Input type="password" v-model="regisinline.password" placeholder="请输入密码">
                                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                                 </Input>
                             </FormItem>
@@ -162,7 +162,7 @@ export default {
                 console.log(response);
                 if (password === response.data.data[0].user_password) {
                   self.$Message.success("登陆成功");
-                  self.$router.push("user");
+                  self.$router.push("user/gonggao");
                   localStorage.setItem("identity", "用户");
                   localStorage.setItem("username", name);
                 } else {
@@ -216,24 +216,39 @@ export default {
         }
       });
     },
+
+    // 注册
     regis(name) {
       var self = this;
       var time = new Date().format("yyyy-MM-dd hh:mm:ss");
-      alert(time);
       this.$refs[name].validate(valid => {
         if (valid) {
           axios
-            .post("/api/regis", {
-              name: this.regisinline.user,
-              password: this.regisinline.password,
-              identity: this.regisinline.identity,
-              email: this.regisinline.email,
-              phone: this.regisinline.phone,
-              time: time
+            .post("/api/b_userloginex", {
+              name: self.regisinline.user
             })
             .then(function(response) {
-              console.log(response);
-              self.$Message.success("注册成功");
+              console.log(response.data.data[0].count);
+              if (response.data.data[0].count == 1) {
+                self.$Message.error("用户名已存在");
+              } else {
+                axios
+                  .post("/api/regis", {
+                    name: self.regisinline.user,
+                    password: self.regisinline.password,
+                    identity: self.regisinline.identity,
+                    email: self.regisinline.email,
+                    phone: self.regisinline.phone,
+                    time: time
+                  })
+                  .then(function(response) {
+                    console.log(response);
+                    self.$Message.success("注册成功");
+                  })
+                  .catch(function(error) {
+                    self.$Message.error("未知错误");
+                  });
+              }
             })
             .catch(function(error) {
               self.$Message.error("未知错误");
@@ -249,19 +264,24 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+template {
+  overflow: hidden;
+}
 .box {
   width: 100%;
-  height: 800px;
-  background: linear-gradient(to top, AliceBlue, Lavender);
+  height: 948px;
   overflow: hidden;
-  background: url(../assets/bg.jpg);
+  background: linear-gradient(to top, AliceBlue, Lavender);
   background-size: 100%;
   overflow: hidden;
 }
 .Card {
   width: 400px;
   margin: 0 auto;
-  margin-top: 200px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
 }
 </style>  
