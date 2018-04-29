@@ -23,16 +23,16 @@
                         <Icon type="ios-person-outline" slot="prepend"></Icon>
                     </Input>
                 </FormItem>
-                <FormItem prop="yongdian" label="用电量">
+                <!-- <FormItem prop="yongdian" label="用电量">
                     <Input type="text" v-model="formInline.yongdian" >
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
                     </Input>
-                </FormItem>
-                <FormItem prop="dianfei" label="电费">
+                </FormItem> -->
+                <!-- <FormItem prop="dianfei" label="电费">
                     <Input type="text" v-model="formInline.dianfei" >
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
                     </Input>
-                </FormItem>
+                </FormItem> -->
                 <FormItem prop="date" label="电费月份(请选择时间)" style="display:inline"></FormItem>
                 <DatePicker type="month" @on-change="setdate" style="width: 200px"></DatePicker>
             </Form>
@@ -63,12 +63,12 @@
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
                     </Input>
                 </FormItem>
-                <FormItem prop="yongdian" label="用电量">
+                <!-- <FormItem prop="yongdian" label="用电量">
                     <Input type="text" v-model="formInline.yongdian" >
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
                     </Input>
-                </FormItem>
-                <FormItem prop="dianfei" label="用电量">
+                </FormItem> -->
+                <FormItem prop="dianfei" label="电费">
                     <Input type="text" v-model="formInline.dianfei" >
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
                     </Input>
@@ -130,10 +130,10 @@ export default {
           title: "平段",
           key: "ping"
         },
-        {
-          title: "用电量(度)",
-          key: "yongdian"
-        },
+        // {
+        //   title: "用电量(度)",
+        //   key: "yongdian"
+        // },
         {
           title: "电费(元)",
           key: "dianfei"
@@ -159,8 +159,8 @@ export default {
         gu: [{ required: true, message: "请输入谷段", trigger: "blur" }],
         feng: [{ required: true, message: "请输入峰段", trigger: "blur" }],
         ping: [{ required: true, message: "请输入平段", trigger: "blur" }],
-        yongdian: [{ required: true, message: "请输入用电", trigger: "blur" }],
-        dianfei: [{ required: true, message: "请输入电费", trigger: "blur" }]
+        yongdian: [{ required: true, message: "请输入用电", trigger: "blur" }]
+        // dianfei: [{ required: true, message: "请输入电费", trigger: "blur" }]
       }
     };
   },
@@ -168,6 +168,13 @@ export default {
     this.Initialize();
   },
   methods: {
+    jumintotal(g, f, p) {
+      return (
+        parseInt(g) * 0.6 +
+        parseInt(f) * 0.8 +
+        parseInt(p) * 0.7
+      ).toFixed(2);
+    },
     handleClearCurrentRow() {
       this.$refs.currentRowTable.clearCurrentRow();
       this.formInline.user = "";
@@ -185,8 +192,12 @@ export default {
                 gu: self.formInline.gu,
                 feng: self.formInline.feng,
                 ping: self.formInline.ping,
-                yongdian: self.formInline.yongdian,
-                dianfei: self.formInline.dianfei
+                // yongdian: self.formInline.yongdian,
+                dianfei: this.jumintotal(
+                  self.formInline.gu,
+                  self.formInline.feng,
+                  self.formInline.ping
+                )
               })
               .then(function(response) {
                 console.log(self.formInline.date);
@@ -200,6 +211,8 @@ export default {
           } else {
             self.$Message.error("注意填写要求");
           }
+        } else {
+          self.$Message.error("注意填写要求");
         }
       });
     },
@@ -215,7 +228,7 @@ export default {
                 gu: self.formInline.gu,
                 feng: self.formInline.feng,
                 ping: self.formInline.ping,
-                yongdian: self.formInline.yongdian,
+                // yongdian: self.formInline.yongdian,
                 dianfei: self.formInline.dianfei,
                 id: self.formInline.id
               })

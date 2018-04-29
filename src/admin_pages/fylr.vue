@@ -63,16 +63,16 @@ export default {
       formItem: {
         name: "",
         date: "",
-        yongdian: 0,
-        gu: 0,
-        ping: 0,
-        feng: 0,
+        yongdian: "",
+        gu: "",
+        ping: "",
+        feng: "",
         handleFocus: 0
       },
       formItemrule: {
         name: [{ required: true, message: "请输入名字", trigger: "blur" }],
-        date: [{ required: true, message: "请输入日期", trigger: "blur" }],
-        yongdian: [{ required: true, message: "请输入用电量", trigger: "blur" }]
+        date: [{ required: true, message: "请输入日期", trigger: "blur" }]
+        // yongdian: [{ required: true, message: "请输入用电量", trigger: "blur" }]
       }
     };
   },
@@ -153,6 +153,14 @@ export default {
                   .then(function(response) {
                     console.log(response.data.data[0]["count(*)"]);
                     if (response.data.data[0]["count(*)"] == 0) {
+                      if (
+                        !self.formItem.gu ||
+                        !self.formItem.feng ||
+                        !self.formItem.ping
+                      ) {
+                        self.$Message.error("请填写3个时段用电，无则填0。");
+                        return false;
+                      }
                       axios
                         .post("/api/insertzd", {
                           name: self.formItem.name,
@@ -208,6 +216,10 @@ export default {
                   .then(function(response) {
                     console.log(response.data.data[0]["count(*)"]);
                     if (response.data.data[0]["count(*)"] == 0) {
+                      if (!self.formItem.yongdian) {
+                        self.$Message.error("请填写用电，无则填0。");
+                        return false;
+                      }
                       axios
                         .post("/api/insert_gongyezd", {
                           name: self.formItem.name,

@@ -124,7 +124,7 @@ export default {
   height: inherit;
 }
 .layout-assistant_2 {
-  width: 166px;
+  width: 300px;
   margin: 0 auto;
   height: inherit;
 }

@@ -103,7 +103,7 @@ app.post('/zdcx', function (req, res, next) {
 app.post('/gzbx', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
-        connection.query($sql.gzbx, [param.address, param.problem, param.date, param.remark], function (err, result) {
+        connection.query($sql.gzbx, [param.name, param.address, param.problem, param.date, param.remark], function (err, result) {
             if (result) {
                 res.send('报修成功')
             } else {
@@ -117,7 +117,7 @@ app.post('/gzbx', function (req, res, next) {
 app.post('/ly', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
-        connection.query($sql.ly.insert, [param.title, param.type, param.content, param.date], function (err, result) {
+        connection.query($sql.ly.insert, [param.title, param.name, param.type, param.content, param.date], function (err, result) {
             if (result) {
                 res.send('留言成功')
             } else {
@@ -373,7 +373,7 @@ app.post('/b_userloginex', function (req, res, next) {
 app.post('/b_userlogin_insert', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
-        connection.query($sql.b.insert.userlogin, [param.name, param.password, param.identity, param.email, param.phone, param.time], function (err, result) {
+        connection.query($sql.b.insert.userlogin, [param.name, param.password, param.identity, param.email, param.phone, param.time, param.yue], function (err, result) {
             if (result) {
                 result = {
                     code: 200,
@@ -390,7 +390,7 @@ app.post('/b_userlogin_insert', function (req, res, next) {
 app.post('/b_userlogin_update', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
-        connection.query($sql.b.update.userlogin, [param.name, param.password, param.identity, param.email, param.phone, param.time, param.id], function (err, result) {
+        connection.query($sql.b.update.userlogin, [param.name, param.password, param.identity, param.email, param.phone, param.yue, param.id], function (err, result) {
             if (result) {
                 result = {
                     code: 200,
@@ -443,7 +443,7 @@ app.get('/b_user_jumin_zd', function (req, res, next) {
 app.post('/b_user_jumin_zd_insert', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
-        connection.query($sql.b.insert.user_jumin_zd, [param.name, param.time, param.gu, param.feng, param.ping, param.yongdian, param.dianfei], function (err, result) {
+        connection.query($sql.b.insert.user_jumin_zd, [param.name, param.time, param.gu, param.feng, param.ping, param.dianfei], function (err, result) {
             if (result) {
                 result = {
                     code: 200,
@@ -460,7 +460,7 @@ app.post('/b_user_jumin_zd_insert', function (req, res, next) {
 app.post('/b_user_jumin_zd_update', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
-        connection.query($sql.b.update.user_jumin_zd, [param.name, param.time, param.gu, param.feng, param.ping, param.yongdian, param.dianfei, param.id], function (err, result) {
+        connection.query($sql.b.update.user_jumin_zd, [param.name, param.time, param.gu, param.feng, param.ping, param.dianfei, param.id], function (err, result) {
             if (result) {
                 result = {
                     code: 200,
@@ -1206,6 +1206,25 @@ app.post('/recharge', function (req, res, next) {
     pool.getConnection(function (err, connection) {
         var param = req.body;
         connection.query($sql.b.recharge, [param.money, param.loginname], function (err, result) {
+            if (result) {
+                result = {
+                    code: 200,
+                    msg: '成功',
+                    data: result
+                };
+            }
+            responseJSON(res, result);
+            connection.release();
+        });
+    });
+});
+
+
+// bug
+app.post('/select_gzwhere', function (req, res, next) {
+    pool.getConnection(function (err, connection) {
+        var param = req.body;
+        connection.query($sql.bug.select_gzwhere, param.name, function (err, result) {
             if (result) {
                 result = {
                     code: 200,

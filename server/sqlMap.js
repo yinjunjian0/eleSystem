@@ -8,10 +8,10 @@ var sqlMap = {
         regis_data: 'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date,yue) VALUES (?,?,?,?,?,?,0)',
     },
     zdcx: 'SELECT * FROM user_juminzd where user_name = ?',
-    gzbx: 'INSERT INTO ele_gzbx(address,type,date,content) VALUES (?,?,?,?)',
+    gzbx: 'INSERT INTO ele_gzbx(name,address,type,date,content,progress) VALUES (?,?,?,?,?,"已提交")',
     ly: {
         select: 'SELECT * FROM ele_ly',
-        insert: 'INSERT INTO ele_ly(title,type,content,date) VALUES (?,?,?,?)'
+        insert: 'INSERT INTO ele_ly(title,name,type,content,date) VALUES (?,?,?,?,?)'
     },
     xgmm: {
         update: 'UPDATE user_login SET user_password = ? WHERE user_name = ?',
@@ -55,8 +55,8 @@ var sqlMap = {
             dataadmin_zh: 'SELECT * FROM dataadmin_login',
         },
         insert: {
-            userlogin: 'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)',
-            user_jumin_zd: 'INSERT INTO user_juminzd(user_name,date,gu,feng,ping,yongdian,dianfei) VALUES (?,?,?,?,?,?,?)',
+            userlogin: 'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date,yue) VALUES (?,?,?,?,?,?,?)',
+            user_jumin_zd: 'INSERT INTO user_juminzd(user_name,date,gu,feng,ping,dianfei) VALUES (?,?,?,?,?,?)',
             user_gongye_zd: 'INSERT INTO user_gongyezd(user_name,date,yongdian,dianfei) VALUES (?,?,?,?)',
             user_gzgl: 'INSERT INTO ele_gzbx(name,address,type,date,content,progress,updatetime) VALUES (?,?,?,?,?,?,?)',
             admin_zh: 'INSERT INTO admin_login(loginname,password) VALUES (?,?)',
@@ -67,8 +67,8 @@ var sqlMap = {
             userrecord: 'INSERT INTO user_record(user_name,date,dianfei) VALUES (?,?,?)'
         },
         update: {
-            userlogin: 'UPDATE user_login SET user_name = ?,user_password =?, user_type =?, user_email =?, user_phone =?, user_date = ? WHERE id = ? ',
-            user_jumin_zd: 'UPDATE user_juminzd SET user_name = ? ,date = ?,gu = ? , feng = ? , ping = ? , yongdian = ? , dianfei = ? WHERE id = ? ',
+            userlogin: 'UPDATE user_login SET user_name = ?,user_password =?, user_type =?, user_email =?, user_phone =?,yue=? WHERE id = ? ',
+            user_jumin_zd: 'UPDATE user_juminzd SET user_name = ? ,date = ?,gu = ? , feng = ? , ping = ? , dianfei = ? WHERE id = ? ',
             user_gongye_zd: 'UPDATE user_gongyezd SET user_name = ? ,date = ?, yongdian = ? , dianfei = ? WHERE id = ? ',
             user_gzgl: 'UPDATE ele_gzbx SET name = ? ,address = ?, type = ? , date = ? , content = ? , progress = ? , updatetime = ? WHERE id = ? ',
             admin_zh: 'UPDATE admin_login SET loginname = ? ,password = ? WHERE id = ? ',
@@ -88,7 +88,7 @@ var sqlMap = {
             admin_gggl: 'DELETE FROM ele_gonggao WHERE id = ?',
             admin_lygl: 'DELETE FROM ele_ly WHERE id = ?',
             dataadmin_zh: 'DELETE FROM dataadmin_login WHERE id = ?',
-            gonggao: 'DELETE FROM ele_ly WHERE id = ?',
+            gonggao: 'DELETE FROM ele_gonggao WHERE id = ?',
             ly: 'DELETE FROM ele_ly WHERE id = ?',
         },
         // 验证
@@ -102,6 +102,9 @@ var sqlMap = {
             recordExist: 'select count(*) from user_record where user_name = ? and date = ?'
         },
         recharge: 'UPDATE `elesystem`.`user_login` SET yue = yue + ? WHERE (`user_name` = ?);'
+    },
+    bug: {
+        select_gzwhere: 'SELECT * FROM ele_gzbx where name = ?'
     }
 
 }

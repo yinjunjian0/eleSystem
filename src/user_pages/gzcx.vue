@@ -12,9 +12,11 @@
                 </Input>
             </FormItem>
             <FormItem prop="problem" label="故障类型">
-                <Input type="text" v-model="failure.problem" placeholder="请输入故障问题">
-                    <Icon type="ios-person-outline" slot="prepend"></Icon>
-                </Input>
+                <Select v-model="failure.problem" placeholder="请输入故障类型">
+                    <Option value="自然故障">自然故障</Option>
+                    <Option value="人工故障">人工故障</Option>
+                    <Option value="其他">其他</Option>
+                </Select>
             </FormItem>
             <FormItem label="出现时间" style="height: 10px;" required></FormItem>
                 <DatePicker type="date" placeholder="请输入出现时间" style="width: 200px"  @on-change="dataformat"></DatePicker>
@@ -32,76 +34,77 @@
     
 </template>
 <script>
-import axios from 'axios'
-    export default {
-      data () {
-        return {
-            failure: {
-                address: '',
-                problem: '',
-                date: '',
-                remark: '',
-            },
-            failurerule: {
-                address: [
-                    { required: true, message: '请输入地址', trigger: 'blur' }
-                ],
-                problem: [
-                    { required: true, message: '请输入故障问题', trigger: 'blur' },
-                ],
-                date: [
-                    { required: true, type: 'date', message: '请输入出现时间', trigger: 'change' },
-                ],
-                remark: [
-                    { required: true, message: '请输入故障描述', trigger: 'blur' }
-                ]
-            },
-        }
+import axios from "axios";
+export default {
+  data() {
+    return {
+      failure: {
+        address: "",
+        problem: "",
+        date: "",
+        remark: ""
+      },
+      failurerule: {
+        address: [{ required: true, message: "请输入地址", trigger: "blur" }],
+        problem: [
+          { required: true, message: "请输入故障问题", trigger: "blur" }
+        ],
+        date: [
+          {
+            required: true,
+            type: "date",
+            message: "请输入出现时间",
+            trigger: "change"
+          }
+        ],
+        remark: [{ required: true, message: "请输入故障描述", trigger: "blur" }]
+      }
+    };
+  },
+  created: function() {},
+  methods: {
+    dataformat(date) {
+      this.failure.date = date;
     },
-    created:function(){
-      
-    },
-    methods:{
-        dataformat(date){
-            this.failure.date = date
-        },
-        failuresub(name) {
-           var self = this
-           this.$refs[name].validate((valid) => {
-                if (valid) {
-                    axios.post('/api/gzbx',{
-                        address: self.failure.address,
-                        problem: self.failure.problem,
-                        date: self.failure.date,
-                        remark: self.failure.remark
-                    })
-                      .then(function (response) {
-                        console.log(response.data)
-                        if (response.data == '报修成功') {
-                            self.$Message.success('报修成功');
-                        }else{
-                            self.$Message.error('报修失败, 注意填写要求');
-                        }
-                      })
-                      .catch(function (error) {
-                        self.$Message.error('未知错误');
-                      });                        
-                } else {
-                    self.$Message.error('报修失败, 注意填写要求');
-                }
+    failuresub(name) {
+      var self = this;
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          axios
+            .post("/api/gzbx", {
+              name: localStorage.getItem("username"),
+              address: self.failure.address,
+              problem: self.failure.problem,
+              date: self.failure.date,
+              remark: self.failure.remark
             })
+            .then(function(response) {
+              console.log(response.data);
+              if (response.data == "报修成功") {
+                self.$Message.success("报修成功");
+              } else {
+                self.$Message.error("报修失败, 注意填写要求");
+              }
+            })
+            .catch(function(error) {
+              self.$Message.error("未知错误");
+            });
+        } else {
+          self.$Message.error("报修失败, 注意填写要求");
         }
+      });
     }
- }
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-li{
+li {
   font-size: 16px;
   line-height: 26px;
 }
-.tips{
+.tips {
   font-size: 16px;
   margin-top: 20px;
 }

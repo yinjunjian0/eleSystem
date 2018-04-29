@@ -49,6 +49,29 @@
                 <Button type="error" size="large" long  @click="confirmshoufei">确认</Button>
             </div>
         </Modal>
+
+        <!-- <Modal v-model="modal2">
+            <p slot="header" style="color:#2d8cf0;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>添加</span>
+            </p>
+            <Form ref="gonggao" :model="gonggao" :rules="gonggaorule" style="text-align: center;">
+                <FormItem prop="title" label="标题">
+                    <Input type="text" v-model="gonggao.title" placeholder="请输入题目">
+                        <Icon type="ios-person-outline" slot="prepend"></Icon>
+                    </Input>
+                </FormItem>
+               
+                <FormItem prop="content" label="内容">
+                    <Input type="textarea" v-model="gonggao.content" placeholder="请输入邮箱">
+                        <Icon type="ios-person-outline" slot="prepend"></Icon>
+                    </Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="primary" size="large" long :loading="modal_loading" @click="add('gonggao')">确认</Button width="100%">
+            </div>
+        </Modal> -->
     </div>
 </template>
 <script>
@@ -67,6 +90,9 @@ export default {
       formInline: {
         user: "",
         password: ""
+      },
+      bj: {
+        date: ""
       },
       ruleInline: {
         user: [{ required: true, message: "请输入用户名", trigger: "blur" }],

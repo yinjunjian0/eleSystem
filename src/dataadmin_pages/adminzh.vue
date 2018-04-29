@@ -192,7 +192,7 @@ export default {
     getRow(currentRow) {
       console.log(currentRow);
       this.formInline.user = currentRow.name;
-      this.formInline.password = currentRow.dianfei;
+      this.formInline.password = currentRow.password;
       this.formInline.id = currentRow.id;
     },
     clearRow() {
