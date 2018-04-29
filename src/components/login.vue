@@ -53,7 +53,7 @@
                                 <RadioGroup v-model="regisinline.identity">
                                     <label>用户类型 ： </label>
                                     <Radio label="居民用电">居民用电</Radio>
-                                    <Radio label="大工业用电">大工业用电</Radio>
+                                    <Radio label="工业用电">工业用电</Radio>
                                 </RadioGroup>
                             </FormItem>
                             <p><Icon type="android-happy"></Icon> 注册功能仅开放 <strong>用户角色</strong></p>
@@ -97,7 +97,10 @@ export default {
         identity: ""
       },
       regisrule: {
-        user: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        user: [
+          { required: true, message: "请输入账号", trigger: "blur" },
+          { type: "string", min: 6, message: "账号至少为6位", trigger: "blur" }
+        ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { type: "string", min: 6, message: "密码至少为6位", trigger: "blur" }
@@ -111,7 +114,10 @@ export default {
             trigger: "blur"
           }
         ],
-        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+        email: [
+          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { type: "email", message: "邮箱格式错误", trigger: "blur" }
+        ],
         identity: [{ required: true, message: "请选择身份", trigger: "change" }]
       }
     };

@@ -55,128 +55,201 @@
     
 </template>
 <script>
-import axios from 'axios'
-    export default {
-        data () {
-            return {
-                typeselect:'',
-                formItem: {
-                    name: '',
-                    date: '',
-                    yongdian:0,
-                    gu: 0,
-                    ping: 0,
-                    feng: 0,
-                    handleFocus: 0
-                },
-                formItemrule:{
-                    name: [
-                        { required: true, message: '请输入名字', trigger: 'blur' }
-                    ],
-                    date: [
-                        { required: true, message: '请输入日期', trigger: 'blur' }
-                    ],
-                    yongdian: [
-                        { required: true, message: '请输入用电量', trigger: 'blur' }
-                    ]
-                }
-            }
-        },
-        computed:{
-            jumintotal(){
-                return (parseInt(this.formItem.gu) * 0.6 + parseInt(this.formItem.feng) * 0.8 + parseInt(this.formItem.ping) * 0.7).toFixed(2)
-            },
-            gongyetotal(){
-                let yd = this.formItem.yongdian
-                if (parseInt(yd) > 35000) {
-                    return 29500 + (yd - 35000) * 0.75
-                }
-                if (parseInt(yd) > 20000) {
-                    return 17500 + (yd - 20000) * 0.8
-                }
-                if (parseInt(yd) > 10000) {
-                    return 9000 + (yd - 10000) * 0.85
-                }
-                return parseInt(yd) * 0.9
-            },
-            yongdian(){
-                return (parseInt(this.formItem.gu) + parseInt(this.formItem.feng) + parseInt(this.formItem.ping))
-            }
-        },
-        created:function(){
-            Date.prototype.Format = function (fmt) { //author: meizz 
-                var o = {
-                    "M+": this.getMonth() + 1, //月份 
-                    "d+": this.getDate(), //日 
-                    "h+": this.getHours(), //小时 
-                    "m+": this.getMinutes(), //分 
-                    "s+": this.getSeconds(), //秒 
-                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-                    "S": this.getMilliseconds() //毫秒 
-                };
-                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-                for (var k in o)
-                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-                return fmt;
-            }
-        },
-        methods:{
-            sub(a){
-                this.$refs[a].validate((valid) => {
-                    if (valid) {
-                        var self = this
-                        axios.post('/api/insertzd',{
-                            name: self.formItem.name,
-                            date: self.formItem.date,
-                            gu: parseInt(self.formItem.gu),
-                            feng: parseInt(self.formItem.feng),
-                            ping: parseInt(self.formItem.ping),
-                            yongdian:parseInt(self.yongdian),
-                            dianfei:self.jumintotal
+import axios from "axios";
+export default {
+  data() {
+    return {
+      typeselect: "",
+      formItem: {
+        name: "",
+        date: "",
+        yongdian: 0,
+        gu: 0,
+        ping: 0,
+        feng: 0,
+        handleFocus: 0
+      },
+      formItemrule: {
+        name: [{ required: true, message: "请输入名字", trigger: "blur" }],
+        date: [{ required: true, message: "请输入日期", trigger: "blur" }],
+        yongdian: [{ required: true, message: "请输入用电量", trigger: "blur" }]
+      }
+    };
+  },
+  computed: {
+    jumintotal() {
+      return (
+        parseInt(this.formItem.gu) * 0.6 +
+        parseInt(this.formItem.feng) * 0.8 +
+        parseInt(this.formItem.ping) * 0.7
+      ).toFixed(2);
+    },
+    gongyetotal() {
+      let yd = this.formItem.yongdian;
+      if (parseInt(yd) > 35000) {
+        return 29500 + (yd - 35000) * 0.75;
+      }
+      if (parseInt(yd) > 20000) {
+        return 17500 + (yd - 20000) * 0.8;
+      }
+      if (parseInt(yd) > 10000) {
+        return 9000 + (yd - 10000) * 0.85;
+      }
+      return parseInt(yd) * 0.9;
+    },
+    yongdian() {
+      return (
+        parseInt(this.formItem.gu) +
+        parseInt(this.formItem.feng) +
+        parseInt(this.formItem.ping)
+      );
+    }
+  },
+  created: function() {
+    Date.prototype.Format = function(fmt) {
+      //author: meizz
+      var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        S: this.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt))
+        fmt = fmt.replace(
+          RegExp.$1,
+          (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+        );
+      for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length == 1
+              ? o[k]
+              : ("00" + o[k]).substr(("" + o[k]).length)
+          );
+      return fmt;
+    };
+    console.log(new Date().Format("yyyy-MM"));
+  },
+  methods: {
+    sub(a) {
+      this.$refs[a].validate(valid => {
+        if (valid) {
+          var self = this;
+          axios
+            .post("/api/verify_nameExist", {
+              name: self.formItem.name
+            })
+            .then(function(response) {
+              if (response.data.data[0]["count(*)"] != 0) {
+                axios
+                  .post("/api/verify_monthExist", {
+                    name: self.formItem.name,
+                    date: self.formItem.date
+                  })
+                  .then(function(response) {
+                    console.log(response.data.data[0]["count(*)"]);
+                    if (response.data.data[0]["count(*)"] == 0) {
+                      axios
+                        .post("/api/insertzd", {
+                          name: self.formItem.name,
+                          date: self.formItem.date,
+                          gu: parseInt(self.formItem.gu),
+                          feng: parseInt(self.formItem.feng),
+                          ping: parseInt(self.formItem.ping),
+                          yongdian: parseInt(self.yongdian),
+                          dianfei: self.jumintotal
                         })
-                          .then(function (response) {
-                            self.$Message.success('添加成功');
-                          })
-                          .catch(function (error) {
-                            self.$Message.error('未知错误');
-                          });
-                    }else {
-                        this.$Message.error('添加失败, 注意填写要求');
-                    }
-                })
-            },
-            gongyesub(a){
-                this.$refs[a].validate((valid) => {
-                    if (valid) {
-                        var self = this
-                        axios.post('/api/insert_gongyezd',{
-                            name: self.formItem.name,
-                            date: self.formItem.date,
-                            yongdian:parseInt(self.formItem.yongdian),
-                            dianfei:self.gongyetotal
+                        .then(function(response) {
+                          self.$Message.success("添加成功");
                         })
-                          .then(function (response) {
-                            self.$Message.success('添加成功');
-                          })
-                          .catch(function (error) {
-                            self.$Message.error('未知错误');
-                          });
-                    }else {
-                        this.$Message.error('添加失败, 注意填写要求');
+                        .catch(function(error) {
+                          self.$Message.error("未知错误");
+                        });
+                    } else {
+                      self.$Message.error("该用户此月份数据已录入");
                     }
-                })
-            },
-            setdate(date){
-                this.formItem.date = date
-                alert(1)
-                },
-            }
+                  })
+                  .catch(function(error) {
+                    self.$Message.error("未知错误");
+                  });
+              } else {
+                self.$Message.error("用户名不存在");
+              }
+            })
+            .catch(function(error) {
+              self.$Message.error("未知错误");
+            });
+        } else {
+          this.$Message.error("添加失败, 注意填写要求");
         }
+      });
+    },
+    gongyesub(a) {
+      this.$refs[a].validate(valid => {
+        if (valid) {
+          var self = this;
+          axios
+            .post("/api/verify_gynameExist", {
+              name: self.formItem.name
+            })
+            .then(function(response) {
+              console.log("用户名是否存在");
+              console.log(response);
+              if (response.data.data[0]["count(*)"] != 0) {
+                axios
+                  .post("/api/verify_gymonthExist", {
+                    name: self.formItem.name,
+                    date: self.formItem.date
+                  })
+                  .then(function(response) {
+                    console.log(response.data.data[0]["count(*)"]);
+                    if (response.data.data[0]["count(*)"] == 0) {
+                      axios
+                        .post("/api/insert_gongyezd", {
+                          name: self.formItem.name,
+                          date: self.formItem.date,
+                          yongdian: parseInt(self.formItem.yongdian),
+                          dianfei: self.gongyetotal
+                        })
+                        .then(function(response) {
+                          self.$Message.success("添加成功");
+                        })
+                        .catch(function(error) {
+                          self.$Message.error("未知错误");
+                        });
+                    } else {
+                      self.$Message.error("该用户此月份数据已录入");
+                    }
+                  })
+                  .catch(function(error) {
+                    self.$Message.error("未知错误");
+                  });
+              } else {
+                self.$Message.error("用户名不存在");
+              }
+            })
+            .catch(function(error) {
+              self.$Message.error("未知错误");
+            });
+        } else {
+          this.$Message.error("添加失败, 注意填写要求");
+        }
+      });
+    },
+    setdate(date) {
+      this.formItem.date = date;
+    }
+  }
+};
 </script>
 <style type="text/css">
-    .box{
-        width: 400px;
-        margin: auto;
-        text-align: center
-    }
+.box {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+}
 </style>

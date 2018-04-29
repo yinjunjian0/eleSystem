@@ -5,7 +5,7 @@ var sqlMap = {
         name: 'SELECT * FROM user_login where user_name = ?'
     },
     regis: {
-        regis_data: 'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date) VALUES (?,?,?,?,?,?)',
+        regis_data: 'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date,yue) VALUES (?,?,?,?,?,?,0)',
     },
     zdcx: 'SELECT * FROM user_juminzd where user_name = ?',
     gzbx: 'INSERT INTO ele_gzbx(address,type,date,content) VALUES (?,?,?,?)',
@@ -76,6 +76,7 @@ var sqlMap = {
             admin_lygl: 'UPDATE ele_ly SET title = ? ,name = ?,type = ?,content = ?,date = ? WHERE id = ? ',
             dataadmin_zh: 'UPDATE dataadmin_login SET loginname = ? ,password = ? WHERE id = ? ',
             userrecord: 'UPDATE user_record SET user_name = ? ,date = ?, dianfei = ?  WHERE id = ? ',
+            gzbx: 'UPDATE ele_gzbx SET progress = ? ,updatetime = ? WHERE id = ? '
         },
         delete: {
             userlogin: 'DELETE FROM user_login WHERE id = ?',
@@ -89,7 +90,18 @@ var sqlMap = {
             dataadmin_zh: 'DELETE FROM dataadmin_login WHERE id = ?',
             gonggao: 'DELETE FROM ele_ly WHERE id = ?',
             ly: 'DELETE FROM ele_ly WHERE id = ?',
-        }
+        },
+        // 验证
+        verify: {
+            nameExist: 'select count(*) from user_login where user_name = ?',
+            monthExist: 'select count(*) from user_juminzd where user_name = ? and date = ?',
+            gynameExist: 'select count(*) from user_gongyezd where user_name = ?',
+            gymonthExist: 'select count(*) from user_gongyezd where user_name = ? and date = ?',
+            jumindianfei: 'select * from user_juminzd where user_name = ? and date = ?',
+            gydianfei: 'select * from user_gongyezd where user_name = ? and date = ?',
+            recordExist: 'select count(*) from user_record where user_name = ? and date = ?'
+        },
+        recharge: 'UPDATE `elesystem`.`user_login` SET yue = yue + ? WHERE (`user_name` = ?);'
     }
 
 }
