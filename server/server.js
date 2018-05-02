@@ -58,7 +58,12 @@ app.post('/regis', function (req, res, next) {
         var param = req.body;
         connection.query($sql.regis.regis_data, [param.name, param.password, param.identity, param.email, param.phone, param.time], function (err, result) {
             if (result) {
-                res.send('注册成功')
+                 result = {
+                    code: 200,
+                    msg: '成功',
+                    data: result,
+                    param: param
+                };
             }
             responseJSON(res, result);
             connection.release();

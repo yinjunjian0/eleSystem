@@ -56,7 +56,7 @@ var sqlMap = {
         },
         insert: {
             userlogin: 'INSERT INTO user_login(user_name,user_password,user_type,user_email,user_phone,user_date,yue) VALUES (?,?,?,?,?,?,?)',
-            user_jumin_zd: 'INSERT INTO user_juminzd(user_name,date,gu,feng,ping,dianfei) VALUES (?,?,?,?,?,?)',
+            user_jumin_zd: 'INSERT INTO user_juminzd(user_name,date,gu,feng,ping,yongdian,dianfei) VALUES (?,?,?,?,?,?,?)',
             user_gongye_zd: 'INSERT INTO user_gongyezd(user_name,date,yongdian,dianfei) VALUES (?,?,?,?)',
             user_gzgl: 'INSERT INTO ele_gzbx(name,address,type,date,content,progress,updatetime) VALUES (?,?,?,?,?,?,?)',
             admin_zh: 'INSERT INTO admin_login(loginname,password) VALUES (?,?)',
