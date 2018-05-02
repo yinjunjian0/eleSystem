@@ -7,10 +7,10 @@
         </p>
         <ul>
           <li>用户名：<label>{{ username }}</label></li>
-          <li>姓名：<label>{{ name }}</label></li>
           <li>用户类型：<label>{{ type }}</label></li>
           <li>邮箱：<label>{{ email }}</label></li>
           <li>电话：<label>{{ phone }}</label></li>
+          <li>余额(元)：<label>{{ yue }}</label></li>
           <li>备注：<label>{{ test }}</label></li>
         </ul>
     </Card>
@@ -29,7 +29,8 @@ export default {
       type: '',
       email: '',
       phone: '',
-      test: ''
+      test: '',
+      yue:''
     }
   },
   created:function(){
@@ -41,9 +42,10 @@ export default {
         console.log(response.data.data)
         self.username = response.data.data[0].user_name
         self.name = response.data.data[0].user_name
-        self.type = response.data.data[0].user_name
+        self.type = response.data.data[0].user_type
         self.email = response.data.data[0].user_email
         self.phone = response.data.data[0].user_phone
+        self.yue = response.data.data[0].yue
         self.test = ''
       })
       .catch(function (error) {

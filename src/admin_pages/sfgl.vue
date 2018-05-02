@@ -261,6 +261,7 @@ export default {
     },
     getyhzl() {
       var self = this;
+      console.log(this.now_Date)
       axios
         .post("/api/zhxx", {
           name: self.formInline.user
@@ -276,8 +277,9 @@ export default {
           console.log(response.data.data);
           self.name = response.data.data[0].user_name;
           self.type = response.data.data[0].user_type;
+          console.log(response.data.data[0].user_type)
           self.yue = response.data.data[0].yue;
-          if (self.type == "居民用户") {
+          if (self.type == "居民用电") {
             axios
               .post("/api/verify_jumindianfei", {
                 name: self.formInline.user,
@@ -342,7 +344,7 @@ export default {
         .catch(function(error) {
           self.$Message.error("未知错误");
         });
-      if (self.type == "居民用户") {
+      if (self.type == "居民用电") {
         axios
           .post("/api/verify_jumindianfei", {
             name: self.formInline.user,

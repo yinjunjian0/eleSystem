@@ -45,7 +45,7 @@
         <Menu mode="horizontal" active-name="1" @on-select="click" v-if="menuIndex == 4">
             <div class="layout-assistant_2">
                 <MenuItem name="tdjd">停电通知</MenuItem>
-                <MenuItem name="ywjd">业务进度</MenuItem>
+                <MenuItem name="ywjd">维修进度</MenuItem>
             </div>
         </Menu>
 
